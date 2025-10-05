@@ -707,7 +707,7 @@
                 <li class="dropdown">
                     <a href="#technical">Technical Implementation</a>
                     <ul class="dropdown-menu">
-                        <li><a href="builder-architecture.html">System Overview</a></li>
+                        <li><a href="builder-architecture.html">Builder & Architecture</a></li>
                         <li><a href="agent-builder.html">Agent Builder Framework</a></li>
                     </ul>
                 </li>
@@ -879,18 +879,18 @@
             <div class="visualization-grid">
                 <div class="viz-card builder-card">
                     <div class="viz-icon">⚙️</div>
-                    <h3>System Overview</h3>
-                    <p>Comprehensive system architecture, agent ecosystem layers, and orchestration framework powering the Marketing SuperAgent platform.</p>
+                    <h3>Builder & Architecture</h3>
+                    <p>Technical framework, agent ecosystem, and developer tools for building, deploying, and orchestrating AI agents.</p>
 
                     <ul class="viz-features">
-                        <li>Multi-layer system architecture</li>
-                        <li>Agent orchestration & coordination</li>
-                        <li>Runtime execution framework</li>
-                        <li>Collaboration patterns & workflows</li>
-                        <li>Platform integration capabilities</li>
+                        <li>Agent development SDK & APIs</li>
+                        <li>Multi-origin agent support</li>
+                        <li>Orchestration runtime framework</li>
+                        <li>Developer console & tooling</li>
+                        <li>Security & deployment pipeline</li>
                     </ul>
 
-                    <a href="builder-architecture.html" class="btn">Explore System</a>
+                    <a href="builder-architecture.html" class="btn">Explore Architecture</a>
                 </div>
 
                 <div class="viz-card">

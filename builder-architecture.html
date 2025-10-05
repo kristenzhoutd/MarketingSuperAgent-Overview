@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Builder & Architecture</title>
+    <title>System Overview</title>
     <style>
         * {
             margin: 0;
@@ -516,7 +516,7 @@
                 <li class="dropdown">
                     <a href="index.html#technical">Technical Implementation</a>
                     <ul class="dropdown-menu">
-                        <li><a href="builder-architecture.html">Builder & Architecture</a></li>
+                        <li><a href="builder-architecture.html">System Overview</a></li>
                         <li><a href="agent-builder.html">Agent Builder Framework</a></li>
                     </ul>
                 </li>
@@ -527,9 +527,9 @@
     <div class="main-container">
         <div class="container">
         <div class="header">
-            <h1>Builder & Architecture</h1>
-            <div class="subtitle">Technical framework, agent ecosystem, and developer tools for building, deploying, and orchestrating AI agents at scale.</div>
-            <div class="tagline">"Code-first approach to AI agent development and deployment"</div>
+            <h1>System Overview</h1>
+            <div class="subtitle">Comprehensive system architecture, agent ecosystem layers, and orchestration framework powering the Marketing SuperAgent platform.</div>
+            <div class="tagline">"Unified platform architecture for intelligent marketing automation"</div>
         </div>
 
         <!-- System Architecture -->
@@ -605,19 +605,6 @@
                 </ul>
             </div>
 
-            <div class="framework-card">
-                <div class="framework-icon">📊</div>
-                <div class="framework-title">Developer Console</div>
-                <div class="framework-description">
-                    Comprehensive dashboard for agent management, analytics, and performance monitoring.
-                </div>
-                <ul class="feature-list">
-                    <li>Real-time agent metrics</li>
-                    <li>Log aggregation & search</li>
-                    <li>Usage analytics</li>
-                    <li>Error tracking & alerts</li>
-                </ul>
-            </div>
         </div>
 
         <!-- Agent Collaboration Patterns -->
@@ -647,130 +634,8 @@
             </div>
         </div>
 
-        <!-- Code Examples -->
-        <div class="code-example">
-            <div class="code-title">Development Examples</div>
-            <div class="code-tabs">
-                <button class="code-tab active" onclick="showTab('agent')">Agent Creation</button>
-                <button class="code-tab" onclick="showTab('workflow')">Workflow Definition</button>
-                <button class="code-tab" onclick="showTab('deployment')">Deployment Config</button>
-            </div>
-
-            <div class="code-content" id="agent-content">
-import { Agent, Context } from '@superagent/sdk';
-
-class CustomRetailAgent extends Agent {
-  async process(context: Context) {
-    const { campaign, audience } = context.input;
-
-    // Analyze retail-specific metrics
-    const insights = await this.analyzeRetailMetrics(campaign);
-
-    // Generate recommendations
-    const recommendations = await this.generateRecommendations(
-      insights,
-      audience
-    );
-
-    return {
-      insights,
-      recommendations,
-      nextActions: this.planNextActions(recommendations)
-    };
-  }
-}
-            </div>
-
-            <div class="code-content" id="workflow-content" style="display: none;">
-workflow:
-  name: "retail-campaign-optimization"
-  triggers:
-    - event: "campaign.created"
-    - schedule: "0 9 * * 1"  # Weekly Monday 9 AM
-
-  steps:
-    - name: "analyze"
-      agent: "retail-agent"
-      input:
-        campaign: "{{ trigger.campaign }}"
-
-    - name: "optimize"
-      agent: "optimization-agent"
-      input:
-        insights: "{{ steps.analyze.output.insights }}"
-
-    - name: "execute"
-      agent: "execution-agent"
-      condition: "{{ steps.optimize.confidence > 0.8 }}"
-            </div>
-
-            <div class="code-content" id="deployment-content" style="display: none;">
-apiVersion: v1
-kind: AgentDeployment
-metadata:
-  name: retail-agent-v1.2.0
-
-spec:
-  replicas: 3
-  resources:
-    cpu: "500m"
-    memory: "1Gi"
-
-  scaling:
-    minReplicas: 1
-    maxReplicas: 10
-    targetCPU: 70%
-
-  security:
-    sandbox: enabled
-    permissions:
-      - "campaigns:read"
-      - "analytics:write"
-
-  monitoring:
-    healthCheck: "/health"
-    metrics: "/metrics"
-            </div>
-        </div>
-
-        <!-- Developer Console Demo -->
-        <div class="console-demo">
-            <div class="console-title">Developer Console</div>
-            <div class="console-window">
-                <div><span class="console-prompt">$</span> superagent deploy retail-agent --env production</div>
-                <div class="console-output">🔄 Building agent package...</div>
-                <div class="console-output">📦 Uploading to registry...</div>
-                <div class="console-output">🚀 Deploying to production cluster...</div>
-                <div class="console-output">⚡ Starting health checks...</div>
-                <div class="console-success">✅ Agent deployed successfully!</div>
-                <div class="console-output">📊 Metrics: https://console.superagent.ai/agents/retail-agent</div>
-                <div><span class="console-prompt">$</span> superagent logs retail-agent --tail 50</div>
-                <div class="console-output">2024-01-15 09:30:15 [INFO] Agent initialized</div>
-                <div class="console-output">2024-01-15 09:30:16 [INFO] Processing campaign: winter-sale-2024</div>
-                <div class="console-success">2024-01-15 09:30:18 [SUCCESS] Generated 12 optimization recommendations</div>
-            </div>
-        </div>
         </div>
     </div>
 
-    <script>
-        function showTab(tabName) {
-            // Hide all content
-            document.querySelectorAll('.code-content').forEach(content => {
-                content.style.display = 'none';
-            });
-
-            // Remove active class from all tabs
-            document.querySelectorAll('.code-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-
-            // Show selected content
-            document.getElementById(tabName + '-content').style.display = 'block';
-
-            // Add active class to selected tab
-            event.target.classList.add('active');
-        }
-    </script>
 </body>
 </html>

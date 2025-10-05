@@ -633,7 +633,6 @@
         <nav class="nav">
             <a href="#" class="logo">Marketing SuperAgent</a>
             <ul class="nav-links">
-                <li><a href="#overview">Overview</a></li>
                 <li class="dropdown">
                     <a href="#business">Business Strategy</a>
                     <ul class="dropdown-menu">
@@ -841,8 +840,7 @@
 
     <!-- Quick Navigation -->
     <div class="quick-navigation">
-        <div class="nav-dot active" onclick="scrollToSection('overview')"></div>
-        <div class="nav-dot" onclick="scrollToSection('business')"></div>
+        <div class="nav-dot active" onclick="scrollToSection('business')"></div>
         <div class="nav-dot" onclick="scrollToSection('ux')"></div>
         <div class="nav-dot" onclick="scrollToSection('ecosystem')"></div>
         <div class="nav-dot" onclick="scrollToSection('technical')"></div>
@@ -863,7 +861,7 @@
 
         // Update navigation dots on scroll
         window.addEventListener('scroll', () => {
-            const sections = ['overview', 'business', 'ux', 'ecosystem', 'technical'];
+            const sections = ['business', 'ux', 'ecosystem', 'technical'];
             const scrollPosition = window.scrollY + window.innerHeight / 2;
 
             sections.forEach((sectionId, index) => {

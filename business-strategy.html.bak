@@ -338,6 +338,61 @@
             box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
         }
 
+        .chart-point.competitor3 {
+            background: #ef4444;
+            top: 90%;
+            left: 20%;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+        }
+
+        .point-labels {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .point-label {
+            position: absolute;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 8px;
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            white-space: nowrap;
+            transform: translate(-50%, -100%);
+            margin-top: -8px;
+        }
+
+        .point-label.superagent-label {
+            top: 25%;
+            left: 75%;
+            color: #8b5cf6;
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+
+        .point-label.competitor1-label {
+            top: 60%;
+            left: 40%;
+            color: #f59e0b;
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        .point-label.competitor2-label {
+            top: 80%;
+            left: 60%;
+            color: #10b981;
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .point-label.competitor3-label {
+            top: 90%;
+            left: 20%;
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
         .chart-labels {
             position: absolute;
             width: 100%;
@@ -483,6 +538,115 @@
             color: #f59e0b;
         }
 
+        /* Value Proposition Styles */
+        .value-proposition {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .value-section {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 16px;
+            padding: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .value-section h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .value-section p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #cbd5e1;
+            margin-bottom: 24px;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-top: 30px;
+        }
+
+        .benefit-item {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .benefit-item:hover {
+            transform: translateY(-4px);
+            border-color: rgba(139, 92, 246, 0.3);
+            box-shadow: 0 8px 32px rgba(139, 92, 246, 0.2);
+        }
+
+        .benefit-icon {
+            font-size: 2rem;
+            margin-bottom: 16px;
+        }
+
+        .benefit-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 12px;
+        }
+
+        .benefit-description {
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            margin-top: 30px;
+        }
+
+        .impact-item {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-left: 4px solid #6366f1;
+            transition: all 0.3s ease;
+        }
+
+        .impact-item:hover {
+            transform: translateX(8px);
+            border-left-color: #8b5cf6;
+            box-shadow: 0 8px 32px rgba(99, 102, 241, 0.2);
+        }
+
+        .impact-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .impact-description {
+            color: #cbd5e1;
+            line-height: 1.7;
+            font-size: 1rem;
+        }
 
         @media (max-width: 768px) {
             .container {
@@ -504,6 +668,36 @@
             .quadrant-chart {
                 height: 300px;
             }
+
+            .value-section {
+                padding: 24px;
+            }
+
+            .value-section h2 {
+                font-size: 1.5rem;
+            }
+
+            .value-section p {
+                font-size: 1rem;
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .benefit-item {
+                padding: 20px;
+            }
+
+            .impact-item {
+                padding: 20px;
+            }
+
+            .point-label {
+                font-size: 10px;
+                padding: 2px 6px;
+            }
         }
     </style>
 </head>
@@ -522,7 +716,14 @@
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a href="index.html#ecosystem">Core Ecosystem</a>
+                    <a href="index.html#ux">AI Native Experience</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="ux-interaction-design.html">UX & Interaction</a></li>
+                        <li><a href="collaboration-modes.html">Collaboration Modes</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="index.html#ecosystem">AI Ecosystem</a>
                     <ul class="dropdown-menu">
                         <li><a href="ecosystem-architecture.html">Agent Ecosystem</a></li>
                         <li><a href="superagent-relationships.html">Agent Relationships</a></li>
@@ -535,13 +736,6 @@
                         <li><a href="agent-builder.html">Agent Builder Framework</a></li>
                     </ul>
                 </li>
-                <li class="dropdown">
-                    <a href="index.html#ux">AI Native Experience</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="ux-interaction-design.html">UX & Interaction</a></li>
-                        <li><a href="collaboration-modes.html">Collaboration Modes</a></li>
-                    </ul>
-                </li>
             </ul>
         </nav>
     </header>
@@ -552,6 +746,61 @@
             <h1>Business Strategy</h1>
             <div class="subtitle">Strategic positioning, market impact, and business value proposition of Marketing SuperAgent as enterprise AI for mid-market teams.</div>
             <div class="tagline">"Democratizing enterprise-grade AI marketing intelligence for mid-market growth"</div>
+        </div>
+
+        <!-- Core Value Proposition -->
+        <div class="value-proposition">
+            <div class="value-section">
+                <h2>🎯 What it is</h2>
+                <p>A central AI co-pilot for marketers. The Marketing Superagent dynamically calls specialized Task Agents, whether from Treasure Data's AI Suites or standalone field agents, to handle specific jobs like campaign briefs, creative generation, audience targeting, or performance optimization.</p>
+                <p>It creates a unified workspace where marketers can plan, execute, and optimize without switching tools or depending on large internal ops/engineering teams. For AI Suite customers, it also functions as an orchestrator, connecting strategy, execution, and optimization across suites in one hub.</p>
+            </div>
+
+            <div class="value-section">
+                <h2>💡 Why it matters</h2>
+                <p>Superagent puts advanced, enterprise-level AI within reach of mid-market teams. Instead of requiring costly integrations, full CDP adoption, or a multi-tool marketing stack, it gives teams enterprise-grade capabilities out of the box.</p>
+                <div class="benefits-grid">
+                    <div class="benefit-item">
+                        <div class="benefit-icon">⚡</div>
+                        <div class="benefit-title">Faster execution</div>
+                        <div class="benefit-description">Campaigns planned and launched in hours, not weeks.</div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">💰</div>
+                        <div class="benefit-title">Lower overhead</div>
+                        <div class="benefit-description">Reduced agency reliance and internal manual work.</div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">🎨</div>
+                        <div class="benefit-title">Creativity unlocked</div>
+                        <div class="benefit-description">Marketers focus on strategy and storytelling, not operations.</div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">🚀</div>
+                        <div class="benefit-title">Adoption accelerator</div>
+                        <div class="benefit-description">By making advanced AI accessible, the Superagent accelerates Data Cloud and AI Suite adoption without slowing down growth or requiring heavy upfront investment.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="value-section">
+                <h2>📈 Impact to the business</h2>
+                <p>The Marketing Superagent is both product-led growth and brand story in one. It becomes the daily touchpoint for marketers, creating habitual engagement and natural expansion into the broader Treasure Data AI ecosystem.</p>
+                <div class="impact-grid">
+                    <div class="impact-item">
+                        <div class="impact-title">Product-led growth</div>
+                        <div class="impact-description">Like Claude for coders, the Superagent is the daily copilot for marketers. It delivers immediate utility, then pulls users deeper into the ecosystem as needs scale.</div>
+                    </div>
+                    <div class="impact-item">
+                        <div class="impact-title">Brand story</div>
+                        <div class="impact-description">It positions Treasure Data as the leader bringing "enterprise AI for marketers" to the mid-market, a whitespace between HubSpot's SMB dominance and enterprise marketing clouds.</div>
+                    </div>
+                    <div class="impact-item">
+                        <div class="impact-title">Revenue & valuation</div>
+                        <div class="impact-description">By replacing agency spend and making AI indispensable in daily workflows, the Superagent drives ARR expansion, broader adoption of the AI Suite, and positions the company for a higher valuation as the category-defining marketing AI platform.</div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Strategic Overview -->
@@ -604,47 +853,19 @@
             <div class="chart-title">Competitive Positioning Matrix</div>
             <div class="quadrant-chart">
                 <div class="chart-axes"></div>
-                <div class="chart-point superagent"></div>
-                <div class="chart-point competitor1"></div>
-                <div class="chart-point competitor2"></div>
+                <div class="chart-point superagent" data-label="Marketing SuperAgent"></div>
+                <div class="chart-point competitor1" data-label="Enterprise Platforms"></div>
+                <div class="chart-point competitor2" data-label="Point Solutions"></div>
+                <div class="chart-point competitor3" data-label="Traditional Agencies"></div>
                 <div class="chart-labels">
                     <div class="label-x">Ease of Implementation →</div>
                     <div class="label-y">AI Sophistication ↑</div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Go-to-Market Roadmap -->
-        <div class="roadmap">
-            <div class="roadmap-title">Go-to-Market Roadmap</div>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-quarter">Q1 2024</div>
-                    <div class="timeline-title">Foundation & Launch</div>
-                    <div class="timeline-description">
-                        Core agent framework, initial suite integrations, early customer beta program
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-quarter">Q2 2024</div>
-                    <div class="timeline-title">Market Expansion</div>
-                    <div class="timeline-description">
-                        Cross-suite agent deployment, partner channel development, customer success optimization
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-quarter">Q3 2024</div>
-                    <div class="timeline-title">Scale & Acceleration</div>
-                    <div class="timeline-description">
-                        Field agent marketplace, enterprise features, international market entry
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-quarter">Q4 2024</div>
-                    <div class="timeline-title">Innovation Leadership</div>
-                    <div class="timeline-description">
-                        Advanced AI capabilities, industry-specific solutions, strategic acquisitions
-                    </div>
+                <div class="point-labels">
+                    <div class="point-label superagent-label">Marketing SuperAgent</div>
+                    <div class="point-label competitor1-label">Enterprise Platforms</div>
+                    <div class="point-label competitor2-label">Point Solutions</div>
+                    <div class="point-label competitor3-label">Traditional Agencies</div>
                 </div>
             </div>
         </div>

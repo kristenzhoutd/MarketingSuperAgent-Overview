@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketing SuperAgent Overview</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header Navigation */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            padding: 0 20px;
+        }
+
+        .nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 80px;
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: 700;
+            color: #f1f5f9;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: #6366f1;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 8px 0;
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 1000;
+            list-style: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu li {
+            padding: 0;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 12px 20px;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            border-radius: 8px;
+            margin: 0 8px;
+        }
+
+        .dropdown-menu a:hover {
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cta-button:hover {
+            background: linear-gradient(135deg, #5855f1, #7c3aed);
+            transform: translateY(-1px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .main-container {
+            padding-top: 80px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 160px 0 120px;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            color: #f1f5f9;
+            margin-bottom: 24px;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        .hero .highlight {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: #cbd5e1;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        .hero-buttons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 60px;
+        }
+
+        .hero-primary {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hero-primary:hover {
+            background: linear-gradient(135deg, #5855f1, #7c3aed);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .hero-secondary {
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: #cbd5e1;
+            padding: 14px 32px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .hero-secondary:hover {
+            border-color: #6366f1;
+            color: #6366f1;
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+            max-width: 800px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 40px;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .stat-card:not(:last-child) {
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #f1f5f9;
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #94a3b8;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .main-content {
+            background: transparent;
+            margin: 80px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #f1f5f9;
+            margin-bottom: 16px;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .visualization-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .viz-card {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .viz-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .viz-card:hover {
+            border-color: #6366f1;
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
+        }
+
+        .viz-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .viz-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 16px;
+            background: rgba(99, 102, 241, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .viz-card:hover .viz-icon {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            transform: scale(1.1);
+        }
+
+        .viz-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .viz-card p {
+            color: #cbd5e1;
+            line-height: 1.5;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+
+        .viz-features {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .viz-features li {
+            color: #94a3b8;
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 20px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .viz-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #6366f1;
+            font-weight: 600;
+            font-size: 11px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #5855f1, #7c3aed);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn::after {
+            content: '→';
+            transition: transform 0.2s ease;
+        }
+
+        .btn:hover::after {
+            transform: translateX(4px);
+        }
+
+        .architecture-overview {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 60px 40px;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .architecture-overview h3 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 20px;
+        }
+
+        .architecture-overview p {
+            font-size: 1.1rem;
+            color: #cbd5e1;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+
+        .agent-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .category-card {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 16px;
+            padding: 30px 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid;
+        }
+
+        .category-card:hover {
+            transform: translateY(-8px);
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .category-suite {
+            border-top-color: #3b82f6;
+        }
+
+        .category-cross {
+            border-top-color: #10b981;
+        }
+
+        .category-field {
+            border-top-color: #f59e0b;
+        }
+
+        .category-card h4 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .category-card p {
+            color: #cbd5e1;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .agent-examples {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .agent-tag {
+            background: rgba(99, 102, 241, 0.2);
+            color: #cbd5e1;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            color: #cbd5e1;
+        }
+
+        .footer p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .quick-navigation {
+            position: fixed;
+            top: 50%;
+            right: 30px;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(99, 102, 241, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active,
+        .nav-dot:hover {
+            background: #6366f1;
+            transform: scale(1.3);
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+        }
+
+        @media (max-width: 1024px) {
+            .visualization-grid.four-column {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .visualization-grid.five-column {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(3, 1fr);
+            }
+
+            .visualization-grid.five-column .viz-card:nth-child(5) {
+                grid-column: span 2;
+            }
+
+            .visualization-grid.six-column {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .hero-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .visualization-grid,
+            .visualization-grid.four-column,
+            .visualization-grid.five-column,
+            .visualization-grid.six-column {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+            }
+
+            .visualization-grid.five-column .viz-card:nth-child(5) {
+                grid-column: 1;
+            }
+
+            .viz-card:not(:last-child) {
+                border-right: none;
+            }
+
+            .agent-categories {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-navigation {
+                display: none;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .nav {
+                justify-content: space-between;
+            }
+
+            .dropdown-menu {
+                position: static;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                box-shadow: none;
+                border: none;
+                background: transparent;
+                padding: 0;
+                margin-top: 8px;
+            }
+
+            .dropdown-menu a {
+                margin: 0;
+                padding: 8px 0;
+                border-radius: 0;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header class="header">
+        <nav class="nav">
+            <a href="#" class="logo">Marketing SuperAgent</a>
+            <ul class="nav-links">
+                <li><a href="#overview">Overview</a></li>
+                <li class="dropdown">
+                    <a href="#business">Business Strategy</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="business-strategy.html">Business Context</a></li>
+                        <li><a href="early-prototypes.html">Early Prototypes & POCs</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#ecosystem">Core Ecosystem</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="ecosystem-architecture.html">Agent Ecosystem</a></li>
+                        <li><a href="superagent-relationships.html">Agent Relationships</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#technical">Technical Implementation</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="builder-architecture.html">Builder & Architecture</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#ux">AI Native Experience</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="ux-interaction-design.html">UX & Interaction</a></li>
+                        <li><a href="collaboration-modes.html">Collaboration Modes</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="main-container">
+        <div class="container">
+            <!-- Hero Section -->
+            <section class="hero" id="overview">
+            <h1>Marketing SuperAgent</h1>
+            <p>One SuperAgent. Every Task. Marketing Made AI-Native.</p>
+
+            <div class="hero-buttons">
+                <a href="early-prototypes.html" class="hero-primary">
+                    <span>View Live Prototypes</span>
+                    <span>→</span>
+                </a>
+                <a href="ecosystem-architecture.html" class="hero-secondary">View Agent Ecosystem</a>
+            </div>
+
+            <div class="hero-stats">
+                <div class="stat-card">
+                    <div class="stat-number">15+</div>
+                    <div class="stat-label">Specialized Agents</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">AI Suites</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Access Models</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1</div>
+                    <div class="stat-label">Unified Platform</div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Main Content -->
+        <div class="main-content" id="visualizations">
+
+            <!-- Business Strategy Section -->
+            <div class="section-divider">
+                <h3 id="business">📈 Business Strategy</h3>
+                <p>Strategic context and market positioning</p>
+            </div>
+
+            <div class="visualization-grid">
+                <div class="viz-card business-card">
+                    <div class="viz-icon">📊</div>
+                    <h3>Business Context</h3>
+                    <p>Strategic positioning, market impact, and business value proposition of Marketing SuperAgent as enterprise AI for mid-market teams.</p>
+
+                    <ul class="viz-features">
+                        <li>Product-led growth strategy</li>
+                        <li>Mid-market AI democratization</li>
+                        <li>Revenue and valuation impact</li>
+                        <li>Competitive positioning</li>
+                        <li>Adoption acceleration metrics</li>
+                    </ul>
+
+                    <a href="business-strategy.html" class="btn">Explore Strategy</a>
+                </div>
+            </div>
+
+            <!-- Core Ecosystem Section -->
+            <div class="section-divider">
+                <h3 id="ecosystem">🌟 Core Ecosystem</h3>
+                <p>Agent architecture and relationships</p>
+            </div>
+
+            <div class="visualization-grid">
+                <div class="viz-card">
+                    <div class="viz-icon">🎯</div>
+                    <h3>Agent Ecosystem</h3>
+                    <p>Interactive visualization of agent relationships, collaboration patterns, and ecosystem structure with dynamic connection mapping.</p>
+
+                    <ul class="viz-features">
+                        <li>Cross-suite foundation (AI Agent Foundry + ICDP)</li>
+                        <li>Suite-specific vertical capabilities</li>
+                        <li>Field & custom agent integration</li>
+                        <li>Interactive relationship mapping</li>
+                        <li>Multi-agent collaboration examples</li>
+                    </ul>
+
+                    <a href="ecosystem-architecture.html" class="btn">Explore Ecosystem</a>
+                </div>
+
+                <div class="viz-card">
+                    <div class="viz-icon">🔗</div>
+                    <h3>Agent Relationship Mapping</h3>
+                    <p>Dedicated interactive canvas showing dynamic connections, data flows, and collaboration patterns between all agent types.</p>
+
+                    <ul class="viz-features">
+                        <li>Real-time connection highlighting</li>
+                        <li>Agent collaboration workflows</li>
+                        <li>Data flow animations</li>
+                        <li>Contextual relationship insights</li>
+                        <li>Interactive exploration controls</li>
+                    </ul>
+
+                    <a href="superagent-relationships.html" class="btn">Explore Relationships</a>
+                </div>
+            </div>
+
+            <!-- Technical Implementation Section -->
+            <div class="section-divider">
+                <h3 id="technical">🛠️ Technical Implementation</h3>
+                <p>Development framework and architecture</p>
+            </div>
+
+            <div class="visualization-grid">
+                <div class="viz-card builder-card">
+                    <div class="viz-icon">⚙️</div>
+                    <h3>Builder & Architecture</h3>
+                    <p>Technical framework, agent ecosystem, and developer tools for building, deploying, and orchestrating AI agents.</p>
+
+                    <ul class="viz-features">
+                        <li>Agent development SDK & APIs</li>
+                        <li>Multi-origin agent support</li>
+                        <li>Orchestration runtime framework</li>
+                        <li>Developer console & tooling</li>
+                        <li>Security & deployment pipeline</li>
+                    </ul>
+
+                    <a href="builder-architecture.html" class="btn">Explore Architecture</a>
+                </div>
+
+            </div>
+
+            <!-- UX & Interaction Section -->
+            <div class="section-divider">
+                <h3 id="ux">💬 AI Native Experience</h3>
+                <p>Intelligent interfaces and collaboration patterns</p>
+            </div>
+
+            <div class="visualization-grid">
+                <div class="viz-card ux-card">
+                    <div class="viz-icon">💬</div>
+                    <h3>UX & Interaction</h3>
+                    <p>Natural language-first interface with intelligent UI confirmations, real-time reasoning display, and contextual upsells.</p>
+
+                    <ul class="viz-features">
+                        <li>Conversational AI-driven workflows</li>
+                        <li>Smart confirmation checkpoints</li>
+                        <li>Real-time agent reasoning display</li>
+                        <li>Contextual upsell integration</li>
+                        <li>WCAG AA accessibility standards</li>
+                    </ul>
+
+                    <a href="ux-interaction-design.html" class="btn">Explore UX Design</a>
+                </div>
+
+                <div class="viz-card">
+                    <div class="viz-icon">🤝</div>
+                    <h3>Collaboration Modes</h3>
+                    <p>Multi-agent and human collaboration patterns for enterprise workflow orchestration, including autonomous agent coordination, interactive workflows, and shared workspaces.</p>
+
+                    <ul class="viz-features">
+                        <li>Agent-to-agent autonomous collaboration</li>
+                        <li>Human-agent interactive workflows</li>
+                        <li>Pause, modify, and resume capabilities</li>
+                        <li>Multi-user shared workspaces</li>
+                        <li>Autopilot and scheduled operations</li>
+                    </ul>
+
+                    <a href="collaboration-modes.html" class="btn">Explore Collaboration</a>
+                </div>
+            </div>
+
+        </div>
+
+        </div>
+    </div>
+
+    <!-- Quick Navigation -->
+    <div class="quick-navigation">
+        <div class="nav-dot active" onclick="scrollToSection('overview')"></div>
+        <div class="nav-dot" onclick="scrollToSection('business')"></div>
+        <div class="nav-dot" onclick="scrollToSection('ecosystem')"></div>
+        <div class="nav-dot" onclick="scrollToSection('technical')"></div>
+        <div class="nav-dot" onclick="scrollToSection('ux')"></div>
+    </div>
+
+    <script>
+        // Smooth scrolling navigation
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+
+            // Update active navigation dot
+            document.querySelectorAll('.nav-dot').forEach(dot => dot.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // Update navigation dots on scroll
+        window.addEventListener('scroll', () => {
+            const sections = ['overview', 'business', 'ecosystem', 'technical', 'ux'];
+            const scrollPosition = window.scrollY + window.innerHeight / 2;
+
+            sections.forEach((sectionId, index) => {
+                const section = document.getElementById(sectionId);
+                const sectionTop = section.offsetTop;
+                const sectionBottom = sectionTop + section.offsetHeight;
+
+                if (scrollPosition >= sectionTop && scrollPosition <= sectionBottom) {
+                    document.querySelectorAll('.nav-dot').forEach(dot => dot.classList.remove('active'));
+                    document.querySelectorAll('.nav-dot')[index].classList.add('active');
+                }
+            });
+        });
+
+        // Add subtle animation on scroll for stat cards
+        window.addEventListener('scroll', () => {
+            const statCards = document.querySelectorAll('.stat-card');
+            const windowHeight = window.innerHeight;
+
+            statCards.forEach((card, index) => {
+                const rect = card.getBoundingClientRect();
+                const isVisible = rect.top < windowHeight && rect.bottom > 0;
+
+                if (isVisible) {
+                    setTimeout(() => {
+                        card.style.transform = 'translateY(0) scale(1)';
+                        card.style.opacity = '1';
+                    }, index * 100);
+                }
+            });
+        });
+
+        // Add hover effects for category cards
+        document.querySelectorAll('.category-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Initialize animations
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.stat-card').forEach((card, index) => {
+                card.style.transform = 'translateY(20px)';
+                card.style.opacity = '0';
+                card.style.transition = 'all 0.6s ease';
+
+                setTimeout(() => {
+                    card.style.transform = 'translateY(0)';
+                    card.style.opacity = '1';
+                }, index * 150);
+            });
+        });
+    </script>
+</body>
+</html>

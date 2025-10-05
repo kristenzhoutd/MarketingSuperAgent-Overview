@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Builder & Architecture</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header Navigation */
+        .top-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            padding: 0 20px;
+        }
+
+        .nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 80px;
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: 700;
+            color: #f1f5f9;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: #6366f1;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 8px 0;
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 1000;
+            list-style: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu li {
+            padding: 0;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 12px 20px;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            border-radius: 8px;
+            margin: 0 8px;
+        }
+
+        .dropdown-menu a:hover {
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+        }
+
+        .main-container {
+            padding-top: 80px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .nav {
+                justify-content: space-between;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #059669 0%, #0d9488 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+            margin-bottom: 40px;
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header .subtitle {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header .tagline {
+            font-size: 1rem;
+            opacity: 0.8;
+            font-style: italic;
+            position: relative;
+            z-index: 1;
+        }
+
+        .architecture-overview {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .overview-card {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 16px;
+            padding: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: white;
+        }
+
+        .layer-diagram {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .layer {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .layer:hover {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+            transform: translateX(5px);
+        }
+
+        .layer.runtime { border-left-color: #3b82f6; }
+        .layer.orchestration { border-left-color: #10b981; }
+        .layer.agents { border-left-color: #f59e0b; }
+        .layer.interface { border-left-color: #ef4444; }
+
+        .layer-title {
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 8px;
+        }
+
+        .layer-description {
+            font-size: 14px;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+
+        .framework-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .framework-card {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 16px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .framework-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(16, 185, 129, 0.3);
+            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.2);
+        }
+
+        .framework-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 20px;
+            color: white;
+        }
+
+        .framework-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 12px;
+        }
+
+        .framework-description {
+            color: #cbd5e1;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .feature-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .collaboration-patterns {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .patterns-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .pattern-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .pattern-card {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .pattern-card:hover {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .pattern-emoji {
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+
+        .pattern-name {
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 8px;
+        }
+
+        .pattern-description {
+            font-size: 13px;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+
+        .code-example {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .code-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .code-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .code-tab {
+            padding: 10px 16px;
+            background: none;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            color: #94a3b8;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .code-tab.active {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .code-content {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 20px;
+            font-family: 'SF Mono', Monaco, Consolas, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            overflow-x: auto;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #e2e8f0;
+        }
+
+        .console-demo {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .console-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .console-window {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 20px;
+            color: #22c55e;
+            font-family: 'SF Mono', Monaco, Consolas, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            overflow-x: auto;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .console-prompt {
+            color: #10b981;
+        }
+
+        .console-output {
+            color: #94a3b8;
+            margin: 4px 0;
+        }
+
+        .console-success {
+            color: #22c55e;
+        }
+
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 10px;
+            }
+
+            .header {
+                padding: 40px 20px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .framework-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pattern-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header class="top-header">
+        <nav class="nav">
+            <a href="index.html" class="logo">Marketing SuperAgent</a>
+            <ul class="nav-links">
+                <li><a href="index.html#overview">Overview</a></li>
+                <li class="dropdown">
+                    <a href="index.html#business">Business Strategy</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="business-strategy.html">Business Context</a></li>
+                        <li><a href="early-prototypes.html">Early Prototypes & POCs</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="index.html#ecosystem">Core Ecosystem</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="ecosystem-architecture.html">Agent Ecosystem</a></li>
+                        <li><a href="superagent-relationships.html">Agent Relationships</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="index.html#technical">Technical Implementation</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="builder-architecture.html">Builder & Architecture</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="index.html#ux">AI Native Experience</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="ux-interaction-design.html">UX & Interaction</a></li>
+                        <li><a href="collaboration-modes.html">Collaboration Modes</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="main-container">
+        <div class="container">
+        <div class="header">
+            <h1>Builder & Architecture</h1>
+            <div class="subtitle">Technical framework, agent ecosystem, and developer tools for building, deploying, and orchestrating AI agents at scale.</div>
+            <div class="tagline">"Code-first approach to AI agent development and deployment"</div>
+        </div>
+
+        <!-- System Architecture -->
+        <div class="architecture-overview">
+            <div class="overview-card">
+                <div class="card-title">
+                    <div class="card-icon">🏗️</div>
+                    System Architecture
+                </div>
+
+                <div class="layer-diagram">
+                    <div class="layer interface">
+                        <div class="layer-title">Interface Layer</div>
+                        <div class="layer-description">Natural language chat, REST APIs, GraphQL endpoints, webhook integrations</div>
+                    </div>
+                    <div class="layer agents">
+                        <div class="layer-title">Agent Layer</div>
+                        <div class="layer-description">Suite-specific, cross-suite, and custom agents with specialized capabilities</div>
+                    </div>
+                    <div class="layer orchestration">
+                        <div class="layer-title">Orchestration Layer</div>
+                        <div class="layer-description">Agent coordination, workflow management, state synchronization</div>
+                    </div>
+                    <div class="layer runtime">
+                        <div class="layer-title">Runtime Layer</div>
+                        <div class="layer-description">Execution engine, security sandbox, resource management, monitoring</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Development Framework -->
+        <div class="framework-grid">
+            <div class="framework-card">
+                <div class="framework-icon">⚙️</div>
+                <div class="framework-title">Agent SDK</div>
+                <div class="framework-description">
+                    Comprehensive development kit for building custom agents with TypeScript/JavaScript support.
+                </div>
+                <ul class="feature-list">
+                    <li>Agent lifecycle management</li>
+                    <li>Built-in security patterns</li>
+                    <li>Testing & debugging tools</li>
+                    <li>Performance optimization</li>
+                </ul>
+            </div>
+
+            <div class="framework-card">
+                <div class="framework-icon">🔌</div>
+                <div class="framework-title">Integration APIs</div>
+                <div class="framework-description">
+                    RESTful and GraphQL APIs for seamless integration with existing marketing technology stacks.
+                </div>
+                <ul class="feature-list">
+                    <li>OAuth 2.0 authentication</li>
+                    <li>Rate limiting & throttling</li>
+                    <li>Webhook notifications</li>
+                    <li>OpenAPI specification</li>
+                </ul>
+            </div>
+
+            <div class="framework-card">
+                <div class="framework-icon">🚀</div>
+                <div class="framework-title">Deployment Pipeline</div>
+                <div class="framework-description">
+                    Automated CI/CD pipeline with testing, staging, and production environments for agent deployment.
+                </div>
+                <ul class="feature-list">
+                    <li>Automated testing suites</li>
+                    <li>Blue-green deployments</li>
+                    <li>Rollback mechanisms</li>
+                    <li>Performance monitoring</li>
+                </ul>
+            </div>
+
+            <div class="framework-card">
+                <div class="framework-icon">📊</div>
+                <div class="framework-title">Developer Console</div>
+                <div class="framework-description">
+                    Comprehensive dashboard for agent management, analytics, and performance monitoring.
+                </div>
+                <ul class="feature-list">
+                    <li>Real-time agent metrics</li>
+                    <li>Log aggregation & search</li>
+                    <li>Usage analytics</li>
+                    <li>Error tracking & alerts</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Agent Collaboration Patterns -->
+        <div class="collaboration-patterns">
+            <div class="patterns-title">Agent Collaboration Patterns</div>
+            <div class="pattern-grid">
+                <div class="pattern-card">
+                    <div class="pattern-emoji">➡️</div>
+                    <div class="pattern-name">Sequential</div>
+                    <div class="pattern-description">Agents work in a predefined order, passing results from one to the next</div>
+                </div>
+                <div class="pattern-card">
+                    <div class="pattern-emoji">⚡</div>
+                    <div class="pattern-name">Parallel</div>
+                    <div class="pattern-description">Multiple agents execute simultaneously, results are aggregated</div>
+                </div>
+                <div class="pattern-card">
+                    <div class="pattern-emoji">👑</div>
+                    <div class="pattern-name">Supervisory</div>
+                    <div class="pattern-description">Master agent coordinates and delegates tasks to specialized agents</div>
+                </div>
+                <div class="pattern-card">
+                    <div class="pattern-emoji">🔄</div>
+                    <div class="pattern-name">Event-Driven</div>
+                    <div class="pattern-description">Agents respond to events and triggers in the marketing ecosystem</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Code Examples -->
+        <div class="code-example">
+            <div class="code-title">Development Examples</div>
+            <div class="code-tabs">
+                <button class="code-tab active" onclick="showTab('agent')">Agent Creation</button>
+                <button class="code-tab" onclick="showTab('workflow')">Workflow Definition</button>
+                <button class="code-tab" onclick="showTab('deployment')">Deployment Config</button>
+            </div>
+
+            <div class="code-content" id="agent-content">
+import { Agent, Context } from '@superagent/sdk';
+
+class CustomRetailAgent extends Agent {
+  async process(context: Context) {
+    const { campaign, audience } = context.input;
+
+    // Analyze retail-specific metrics
+    const insights = await this.analyzeRetailMetrics(campaign);
+
+    // Generate recommendations
+    const recommendations = await this.generateRecommendations(
+      insights,
+      audience
+    );
+
+    return {
+      insights,
+      recommendations,
+      nextActions: this.planNextActions(recommendations)
+    };
+  }
+}
+            </div>
+
+            <div class="code-content" id="workflow-content" style="display: none;">
+workflow:
+  name: "retail-campaign-optimization"
+  triggers:
+    - event: "campaign.created"
+    - schedule: "0 9 * * 1"  # Weekly Monday 9 AM
+
+  steps:
+    - name: "analyze"
+      agent: "retail-agent"
+      input:
+        campaign: "{{ trigger.campaign }}"
+
+    - name: "optimize"
+      agent: "optimization-agent"
+      input:
+        insights: "{{ steps.analyze.output.insights }}"
+
+    - name: "execute"
+      agent: "execution-agent"
+      condition: "{{ steps.optimize.confidence > 0.8 }}"
+            </div>
+
+            <div class="code-content" id="deployment-content" style="display: none;">
+apiVersion: v1
+kind: AgentDeployment
+metadata:
+  name: retail-agent-v1.2.0
+
+spec:
+  replicas: 3
+  resources:
+    cpu: "500m"
+    memory: "1Gi"
+
+  scaling:
+    minReplicas: 1
+    maxReplicas: 10
+    targetCPU: 70%
+
+  security:
+    sandbox: enabled
+    permissions:
+      - "campaigns:read"
+      - "analytics:write"
+
+  monitoring:
+    healthCheck: "/health"
+    metrics: "/metrics"
+            </div>
+        </div>
+
+        <!-- Developer Console Demo -->
+        <div class="console-demo">
+            <div class="console-title">Developer Console</div>
+            <div class="console-window">
+                <div><span class="console-prompt">$</span> superagent deploy retail-agent --env production</div>
+                <div class="console-output">🔄 Building agent package...</div>
+                <div class="console-output">📦 Uploading to registry...</div>
+                <div class="console-output">🚀 Deploying to production cluster...</div>
+                <div class="console-output">⚡ Starting health checks...</div>
+                <div class="console-success">✅ Agent deployed successfully!</div>
+                <div class="console-output">📊 Metrics: https://console.superagent.ai/agents/retail-agent</div>
+                <div><span class="console-prompt">$</span> superagent logs retail-agent --tail 50</div>
+                <div class="console-output">2024-01-15 09:30:15 [INFO] Agent initialized</div>
+                <div class="console-output">2024-01-15 09:30:16 [INFO] Processing campaign: winter-sale-2024</div>
+                <div class="console-success">2024-01-15 09:30:18 [SUCCESS] Generated 12 optimization recommendations</div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all content
+            document.querySelectorAll('.code-content').forEach(content => {
+                content.style.display = 'none';
+            });
+
+            // Remove active class from all tabs
+            document.querySelectorAll('.code-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected content
+            document.getElementById(tabName + '-content').style.display = 'block';
+
+            // Add active class to selected tab
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

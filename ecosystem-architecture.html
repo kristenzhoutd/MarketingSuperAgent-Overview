@@ -1,0 +1,1705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Ecosystem</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header Navigation */
+        .top-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            padding: 0 20px;
+        }
+
+        .nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 80px;
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: 700;
+            color: #f1f5f9;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: #6366f1;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 8px 0;
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 1000;
+            list-style: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu li {
+            padding: 0;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 12px 20px;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            border-radius: 8px;
+            margin: 0 8px;
+        }
+
+        .dropdown-menu a:hover {
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+        }
+
+        .main-container {
+            padding-top: 80px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .nav {
+                justify-content: space-between;
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+            margin-bottom: 40px;
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="circuit" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M10,0 L10,10 M0,10 L10,10 L20,10 M10,10 L10,20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23circuit)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header .subtitle {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .architecture-layers {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .layer {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .layer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+            opacity: 0.5;
+        }
+
+        .layer-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .layer-number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .layer-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #f1f5f9;
+        }
+
+        .layer-description {
+            color: #cbd5e1;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        .layer-components {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .component-card {
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .component-card:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .component-title {
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .component-icon {
+            font-size: 1.2rem;
+        }
+
+        .component-description {
+            font-size: 14px;
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+
+        .suite-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .suite-table th,
+        .suite-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .suite-table th {
+            background: rgba(99, 102, 241, 0.2);
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+
+        .suite-table td {
+            color: #cbd5e1;
+        }
+
+        .suite-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .suite-table tr:hover {
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .flow-example {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .flow-example::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.05), rgba(59, 130, 246, 0.05));
+            opacity: 0.5;
+        }
+
+        .flow-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 25px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .flow-steps {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .flow-step:hover {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .flow-step-number {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            font-size: 14px;
+        }
+
+        .flow-step-content {
+            flex: 1;
+        }
+
+        .flow-step-title {
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 5px;
+        }
+
+        .flow-step-description {
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        .visual-diagram {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .visual-diagram::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.1), transparent 50%);
+        }
+
+        .diagram-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .diagram-container {
+            position: relative;
+            height: 500px;
+            border-radius: 12px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+            z-index: 1;
+        }
+
+        .diagram-layer {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .diagram-layer:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: scale(1.02);
+        }
+
+        .diagram-layer:last-child {
+            margin-bottom: 0;
+        }
+
+        .diagram-layer-title {
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .diagram-layer-items {
+            font-size: 12px;
+            color: #94a3b8;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .diagram-layer-item {
+            background: rgba(99, 102, 241, 0.2);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+        }
+
+
+        /* Relationship Mapping Styles */
+        .relationship-mapping {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .relationship-mapping::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+            opacity: 0.5;
+        }
+
+        .mapping-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 10px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .mapping-subtitle {
+            font-size: 1rem;
+            color: #cbd5e1;
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .mapping-container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .mapping-legend {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
+        .mapping-legend h4 {
+            font-size: 14px;
+            margin-bottom: 15px;
+            color: #f1f5f9;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .suite-color { background: #3b82f6; }
+        .cross-color { background: #10b981; }
+        .field-color { background: #f59e0b; }
+
+        .mapping-canvas {
+            width: 100%;
+            height: 500px;
+            position: relative;
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            overflow: hidden;
+        }
+
+        .mapping-node {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 12px 16px;
+            min-width: 120px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .mapping-node:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            z-index: 20;
+        }
+
+        .mapping-node.active {
+            background: rgba(139, 92, 246, 0.3);
+            border-color: #8b5cf6;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+            transform: scale(1.15);
+            z-index: 20;
+        }
+
+        .core-node {
+            background: rgba(139, 92, 246, 0.3);
+            border-color: #8b5cf6;
+        }
+
+        .suite-node {
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+
+        .suite-node:hover,
+        .suite-node.active {
+            border-color: #3b82f6;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+
+        .cross-node {
+            border-color: rgba(16, 185, 129, 0.5);
+        }
+
+        .cross-node:hover,
+        .cross-node.active {
+            border-color: #10b981;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+        }
+
+        .field-node {
+            border-color: rgba(245, 158, 11, 0.5);
+        }
+
+        .field-node:hover,
+        .field-node.active {
+            border-color: #f59e0b;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+        }
+
+        .mapping-icon {
+            font-size: 20px;
+            margin-bottom: 6px;
+        }
+
+        .mapping-name {
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 3px;
+            color: #f1f5f9;
+        }
+
+        .mapping-type {
+            font-size: 9px;
+            opacity: 0.7;
+            color: #cbd5e1;
+        }
+
+        .mapping-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, #8b5cf6, #3b82f6, #10b981);
+            opacity: 0;
+            transition: all 0.5s ease;
+            z-index: 1;
+            border-radius: 1px;
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+        }
+
+        .mapping-line.active {
+            opacity: 0.8;
+            animation: pulse 2s infinite, flow 3s infinite;
+        }
+
+        .mapping-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .mapping-btn {
+            padding: 10px 18px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #f1f5f9;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .mapping-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .mapping-btn.active {
+            background: rgba(139, 92, 246, 0.3);
+            border-color: #8b5cf6;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 10px;
+            }
+
+            .header {
+                padding: 40px 20px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .layer-components {
+                grid-template-columns: 1fr;
+            }
+
+            .suite-table {
+                font-size: 14px;
+            }
+
+            .suite-table th,
+            .suite-table td {
+                padding: 10px;
+            }
+        }
+
+        .architecture-overview {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 60px 40px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .architecture-overview h3 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 20px;
+        }
+
+        .architecture-overview p {
+            font-size: 1.1rem;
+            color: #cbd5e1;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+
+        .agent-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .category-card {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 16px;
+            padding: 30px 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid;
+        }
+
+        .category-card:hover {
+            transform: translateY(-8px);
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .category-suite {
+            border-top-color: #3b82f6;
+        }
+
+        .category-cross {
+            border-top-color: #10b981;
+        }
+
+        .category-field {
+            border-top-color: #f59e0b;
+        }
+
+        .category-card h4 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .category-card p {
+            color: #cbd5e1;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .agent-examples {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .agent-tag {
+            background: rgba(99, 102, 241, 0.2);
+            color: #cbd5e1;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        /* Access Models */
+        .access-models {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .models-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .models-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .model-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            transition: all 0.3s ease;
+        }
+
+        .model-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+        }
+
+        .model-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .foundry-icon { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        .suite-icon { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .enterprise-icon { background: linear-gradient(135deg, #f59e0b, #d97706); }
+
+        .model-name {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .model-description {
+            font-size: 0.9rem;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        /* Platform Integration */
+        .platform-integration {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            border-radius: 16px;
+            padding: 30px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        .platform-integration::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="circuit" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M10,0 L10,10 M0,10 L10,10 L20,10 M10,10 L10,20" fill="none" stroke="rgba(34,197,94,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23circuit)"/></svg>');
+        }
+
+        .integration-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .integration-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .feature-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #22c55e;
+        }
+
+        .feature-description {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header class="top-header">
+        <nav class="nav">
+            <a href="index.html" class="logo">Marketing SuperAgent</a>
+            <ul class="nav-links">
+                <li><a href="index.html#overview">Overview</a></li>
+                <li class="dropdown">
+                    <a href="index.html#business">Business Strategy</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="business-strategy.html">Business Context</a></li>
+                        <li><a href="early-prototypes.html">Early Prototypes & POCs</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="index.html#ecosystem">Core Ecosystem</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="ecosystem-architecture.html">Agent Ecosystem</a></li>
+                        <li><a href="superagent-relationships.html">Agent Relationships</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="index.html#technical">Technical Implementation</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="builder-architecture.html">Builder & Architecture</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="index.html#ux">AI Native Experience</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="ux-interaction-design.html">UX & Interaction</a></li>
+                        <li><a href="collaboration-modes.html">Collaboration Modes</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="main-container">
+        <div class="container">
+        <div class="header">
+            <h1>🎯 Agent Ecosystem</h1>
+            <div class="subtitle">Interactive visualization of agent relationships, collaboration patterns, and ecosystem structure</div>
+        </div>
+
+        <!-- Architecture Overview -->
+        <section class="architecture-overview">
+            <h3>Marketing SuperAgent Architecture</h3>
+            <p>All AI capabilities across suites and independent agents are unified under one intelligent orchestration layer, creating a seamless ecosystem of specialized marketing intelligence.</p>
+
+            <div class="agent-categories">
+                <div class="category-card category-suite">
+                    <h4>📦 Suite-Specific Agents</h4>
+                    <p>Domain-specific agents accessible through AI Suite license purchase</p>
+                    <div class="agent-examples">
+                        <span class="agent-tag">Creative Suite</span>
+                        <span class="agent-tag">Engagement Suite</span>
+                        <span class="agent-tag">Service Suite</span>
+                        <span class="agent-tag">Paid Media Suite</span>
+                        <span class="agent-tag">Personalization</span>
+                    </div>
+                </div>
+
+                <div class="category-card category-cross">
+                    <h4>🔗 Cross-Suite Agents</h4>
+                    <p>Shared agents accessible through AI Agent Foundry, bundled with ICDP</p>
+                    <div class="agent-examples">
+                        <span class="agent-tag">Audience Agent</span>
+                        <span class="agent-tag">Journey Agent</span>
+                        <span class="agent-tag">Program Brief</span>
+                        <span class="agent-tag">Optimization Advisor</span>
+                    </div>
+                </div>
+
+                <div class="category-card category-field">
+                    <h4>⚡ Field & Custom Agents</h4>
+                    <p>Independent agents built via Agent Foundry for unique workflows</p>
+                    <div class="agent-examples">
+                        <span class="agent-tag">Retail Agent</span>
+                        <span class="agent-tag">Hospitality Agent</span>
+                        <span class="agent-tag">Gaming Agent</span>
+                        <span class="agent-tag">Custom Builds</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Architecture Layers -->
+        <div class="architecture-layers">
+
+            <!-- Layer 1: Cross-Suite Foundation -->
+            <div class="layer">
+                <div class="layer-header">
+                    <div class="layer-number">1</div>
+                    <div class="layer-title">Cross-Suite Foundation: AI Agent Foundry + ICDP</div>
+                </div>
+                <div class="layer-description">
+                    Acts as the shared intelligence layer connecting all suites. Hosts reusable, cross-suite agents and core data/identity capabilities. Available through AI Agent Foundry + ICDP subscription.
+                </div>
+                <div class="layer-components">
+                    <div class="component-card">
+                        <div class="component-title">
+                            <span class="component-icon">👥</span>
+                            Audience Agent
+                        </div>
+                        <div class="component-description">Segment creation, refinement, and activation</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-title">
+                            <span class="component-icon">🛣️</span>
+                            Journey Agent
+                        </div>
+                        <div class="component-description">Channel orchestration and journey optimization</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-title">
+                            <span class="component-icon">📋</span>
+                            Program Brief Agent
+                        </div>
+                        <div class="component-description">High-level strategy and program planning</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-title">
+                            <span class="component-icon">⚡</span>
+                            Optimization Agent
+                        </div>
+                        <div class="component-description">Spend analysis and channel mix recommendations</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-title">
+                            <span class="component-icon">📊</span>
+                            Performance Analysis Agent
+                        </div>
+                        <div class="component-description">Cross-channel performance monitoring and insights</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-title">
+                            <span class="component-icon">📥</span>
+                            Data Onboarding Agent
+                        </div>
+                        <div class="component-description">Automated data integration and mapping workflows</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-title">
+                            <span class="component-icon">💎</span>
+                            IDU Agent
+                        </div>
+                        <div class="component-description">Unified identity, data unification, and real-time triggers</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Layer 2: Suite-Specific Agents -->
+            <div class="layer">
+                <div class="layer-header">
+                    <div class="layer-number">2</div>
+                    <div class="layer-title">Suite-Specific Agents (Vertical Layer)</div>
+                </div>
+                <div class="layer-description">
+                    Each AI Suite includes purpose-built agents and domain capabilities. Access available via suite license purchase.
+                </div>
+                <table class="suite-table">
+                    <thead>
+                        <tr>
+                            <th>Suite</th>
+                            <th>Example Agents</th>
+                            <th>Core Focus</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Engagement AI Suite</strong></td>
+                            <td>Landing Page Agent, Email Agent, Trigger Agent</td>
+                            <td>Orchestrate omnichannel journeys and real-time engagement</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Creative AI Suite</strong></td>
+                            <td>Creative Brief Agent, Asset Builder Agent, DAM Tagging Agent</td>
+                            <td>Automate asset generation, curation, and creative strategy</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Service AI Suite</strong></td>
+                            <td>CX Agent, Diamond Support Agent</td>
+                            <td>Enable 1:1 personalized service experiences</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Paid Media AI Suite</strong></td>
+                            <td>Ad Campaign Brief Agent, Budget Allocation Optimization Agent, Ad Campaign Diagnosis Agent</td>
+                            <td>Plan, diagnose, and optimize cross-channel ad performance</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Personalization AI Suite</strong></td>
+                            <td>Attribute Group Agent, Content Match Agent</td>
+                            <td>Real-time personalization and recommendation</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Layer 3: Field & Custom Agents -->
+            <div class="layer">
+                <div class="layer-header">
+                    <div class="layer-number">3</div>
+                    <div class="layer-title">Field & Custom Agents (Outer Layer)</div>
+                </div>
+                <div class="layer-description">
+                    Agents built for specific industries, markets, or enterprise needs. Can be connected through the SuperAgent platform and interoperable with Foundry and Suite agents. Built or integrated via Agent Foundry SDK/API.
+                </div>
+                <div class="layer-components">
+                    <div class="component-card">
+                        <div class="component-title">
+                            <span class="component-icon">🏪</span>
+                            Field Agents
+                        </div>
+                        <div class="component-description">Retail Agent, Hospitality Agent, Gaming Agent</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-title">
+                            <span class="component-icon">🔧</span>
+                            Custom Agents
+                        </div>
+                        <div class="component-description">User- or partner-developed agents for tailored workflows</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Access Models -->
+        <div class="access-models">
+            <div class="models-title">🚀 Access Models</div>
+            <div class="models-grid">
+                <div class="model-card">
+                    <div class="model-icon foundry-icon">🛠️</div>
+                    <div class="model-name">AI Agent Foundry</div>
+                    <div class="model-description">
+                        Build and deploy custom agents, access cross-suite agents, manage agent lifecycle and performance monitoring.
+                    </div>
+                </div>
+                <div class="model-card">
+                    <div class="model-icon suite-icon">📦</div>
+                    <div class="model-name">Suite License</div>
+                    <div class="model-description">
+                        Access domain-specific agents through individual AI Suite purchases with specialized capabilities and integrations.
+                    </div>
+                </div>
+                <div class="model-card">
+                    <div class="model-icon enterprise-icon">🏢</div>
+                    <div class="model-name">Enterprise Platform</div>
+                    <div class="model-description">
+                        Unified platform integration with ICDP, comprehensive agent orchestration, and enterprise security features.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Platform Integration -->
+        <div class="platform-integration">
+            <div class="integration-title">🌐 Platform Integration Benefits</div>
+            <div class="integration-features">
+                <div class="feature-item">
+                    <div class="feature-title">Unified Data Layer</div>
+                    <div class="feature-description">
+                        Seamless access to customer data, campaign metrics, and business intelligence across all agents and touchpoints.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-title">Cross-Agent Collaboration</div>
+                    <div class="feature-description">
+                        Agents can communicate, share insights, and coordinate actions for more effective marketing campaigns.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-title">Centralized Governance</div>
+                    <div class="feature-description">
+                        Consistent brand compliance, approval workflows, and quality control across all AI-generated content and strategies.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-title">Real-time Optimization</div>
+                    <div class="feature-description">
+                        Continuous learning and adaptation based on performance data and market changes across the entire ecosystem.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Relationship Mapping -->
+        <div class="relationship-mapping">
+            <div class="mapping-title">🔗 Interactive Agent Relationships</div>
+            <div class="mapping-subtitle">Explore dynamic connections, data flows, and collaboration patterns between agents</div>
+
+            <div class="mapping-container">
+                <div class="mapping-legend">
+                    <h4>Agent Types</h4>
+                    <div class="legend-item">
+                        <div class="legend-color suite-color"></div>
+                        <span>Suite-Specific</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color cross-color"></div>
+                        <span>Cross-Suite</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color field-color"></div>
+                        <span>Field & Custom</span>
+                    </div>
+                </div>
+
+                <div class="mapping-canvas" id="mapping-canvas">
+                    <!-- SuperAgent Core -->
+                    <div class="mapping-node core-node" id="superagent-core" style="top: 10%; left: 50%; transform: translateX(-50%);"
+                         onmouseover="highlightMappingConnections('superagent-core')" onmouseout="clearMappingHighlights()">
+                        <div class="mapping-icon">🎯</div>
+                        <div class="mapping-name">SuperAgent Core</div>
+                        <div class="mapping-type">Orchestration</div>
+                    </div>
+
+                    <!-- Suite-Specific Agents -->
+                    <div class="mapping-node suite-node" id="creative-suite" style="top: 25%; left: 15%;"
+                         onmouseover="highlightMappingConnections('creative-suite')" onmouseout="clearMappingHighlights()">
+                        <div class="mapping-icon">🎨</div>
+                        <div class="mapping-name">Creative Suite</div>
+                        <div class="mapping-type">Suite-Specific</div>
+                    </div>
+
+                    <div class="mapping-node suite-node" id="engagement-suite" style="top: 25%; right: 15%;"
+                         onmouseover="highlightMappingConnections('engagement-suite')" onmouseout="clearMappingHighlights()">
+                        <div class="mapping-icon">📱</div>
+                        <div class="mapping-name">Engagement Suite</div>
+                        <div class="mapping-type">Suite-Specific</div>
+                    </div>
+
+                    <div class="mapping-node suite-node" id="paidmedia-suite" style="top: 40%; left: 5%;"
+                         onmouseover="highlightMappingConnections('paidmedia-suite')" onmouseout="clearMappingHighlights()">
+                        <div class="mapping-icon">💰</div>
+                        <div class="mapping-name">Paid Media Suite</div>
+                        <div class="mapping-type">Suite-Specific</div>
+                    </div>
+
+                    <div class="mapping-node suite-node" id="service-suite" style="top: 40%; right: 5%;"
+                         onmouseover="highlightMappingConnections('service-suite')" onmouseout="clearMappingHighlights()">
+                        <div class="mapping-icon">🛠️</div>
+                        <div class="mapping-name">Service Suite</div>
+                        <div class="mapping-type">Suite-Specific</div>
+                    </div>
+
+                    <div class="mapping-node suite-node" id="personalization-suite" style="top: 55%; left: 10%;"
+                         onmouseover="highlightMappingConnections('personalization-suite')" onmouseout="clearMappingHighlights()">
+                        <div class="mapping-icon">👤</div>
+                        <div class="mapping-name">Personalization Suite</div>
+                        <div class="mapping-type">Suite-Specific</div>
+                    </div>
+
+                    <!-- Cross-Suite Foundation -->
+                    <div class="mapping-node cross-node" id="audience" style="top: 45%; left: 35%;"
+                         onmouseover="highlightMappingConnections('audience')" onmouseout="clearMappingHighlights()">
+                        <div class="mapping-icon">👥</div>
+                        <div class="mapping-name">Audience Agent</div>
+                        <div class="mapping-type">Cross-Suite</div>
+                    </div>
+
+                    <div class="mapping-node cross-node" id="journey" style="top: 45%; right: 35%;"
+                         onmouseover="highlightMappingConnections('journey')" onmouseout="clearMappingHighlights()">
+                        <div class="mapping-icon">🗺️</div>
+                        <div class="mapping-name">Journey Agent</div>
+                        <div class="mapping-type">Cross-Suite</div>
+                    </div>
+
+                    <div class="mapping-node cross-node" id="program-brief" style="top: 60%; left: 30%;"
+                         onmouseover="highlightMappingConnections('program-brief')" onmouseout="clearMappingHighlights()">
+                        <div class="mapping-icon">📋</div>
+                        <div class="mapping-name">Program Brief Agent</div>
+                        <div class="mapping-type">Cross-Suite</div>
+                    </div>
+
+                    <div class="mapping-node cross-node" id="optimization" style="top: 60%; right: 30%;"
+                         onmouseover="highlightMappingConnections('optimization')" onmouseout="clearMappingHighlights()">
+                        <div class="mapping-icon">⚡</div>
+                        <div class="mapping-name">Optimization Agent</div>
+                        <div class="mapping-type">Cross-Suite</div>
+                    </div>
+
+                    <div class="mapping-node cross-node" id="performance-analysis" style="top: 75%; left: 25%;"
+                         onmouseover="highlightMappingConnections('performance-analysis')" onmouseout="clearMappingHighlights()">
+                        <div class="mapping-icon">📊</div>
+                        <div class="mapping-name">Performance Analysis Agent</div>
+                        <div class="mapping-type">Cross-Suite</div>
+                    </div>
+
+                    <div class="mapping-node cross-node" id="data-onboarding" style="top: 75%; left: 50%; transform: translateX(-50%);"
+                         onmouseover="highlightMappingConnections('data-onboarding')" onmouseout="clearMappingHighlights()">
+                        <div class="mapping-icon">📥</div>
+                        <div class="mapping-name">Data Onboarding Agent</div>
+                        <div class="mapping-type">Cross-Suite</div>
+                    </div>
+
+                    <div class="mapping-node cross-node" id="idu-agent" style="top: 75%; right: 25%;"
+                         onmouseover="highlightMappingConnections('idu-agent')" onmouseout="clearMappingHighlights()">
+                        <div class="mapping-icon">💎</div>
+                        <div class="mapping-name">IDU Agent</div>
+                        <div class="mapping-type">Cross-Suite</div>
+                    </div>
+
+                    <!-- Field & Custom Agents -->
+                    <div class="mapping-node field-node" id="retail" style="bottom: 10%; left: 15%;"
+                         onmouseover="highlightMappingConnections('retail')" onmouseout="clearMappingHighlights()">
+                        <div class="mapping-icon">🏪</div>
+                        <div class="mapping-name">Retail Agent</div>
+                        <div class="mapping-type">Field & Custom</div>
+                    </div>
+
+                    <div class="mapping-node field-node" id="hospitality" style="bottom: 10%; left: 50%; transform: translateX(-50%);"
+                         onmouseover="highlightMappingConnections('hospitality')" onmouseout="clearMappingHighlights()">
+                        <div class="mapping-icon">🏨</div>
+                        <div class="mapping-name">Hospitality Agent</div>
+                        <div class="mapping-type">Field & Custom</div>
+                    </div>
+
+                    <div class="mapping-node field-node" id="gaming" style="bottom: 10%; right: 15%;"
+                         onmouseover="highlightMappingConnections('gaming')" onmouseout="clearMappingHighlights()">
+                        <div class="mapping-icon">🎮</div>
+                        <div class="mapping-name">Gaming Agent</div>
+                        <div class="mapping-type">Field & Custom</div>
+                    </div>
+
+                    <!-- Connection Lines -->
+                    <div class="mapping-line" id="superagent-core-creative-suite"></div>
+                    <div class="mapping-line" id="superagent-core-engagement-suite"></div>
+                    <div class="mapping-line" id="superagent-core-paidmedia-suite"></div>
+                    <div class="mapping-line" id="superagent-core-service-suite"></div>
+                    <div class="mapping-line" id="superagent-core-personalization-suite"></div>
+                    <div class="mapping-line" id="superagent-core-audience"></div>
+                    <div class="mapping-line" id="superagent-core-journey"></div>
+                    <div class="mapping-line" id="superagent-core-program-brief"></div>
+                    <div class="mapping-line" id="superagent-core-optimization"></div>
+
+                    <div class="mapping-line" id="audience-creative-suite"></div>
+                    <div class="mapping-line" id="audience-engagement-suite"></div>
+                    <div class="mapping-line" id="audience-paidmedia-suite"></div>
+                    <div class="mapping-line" id="audience-personalization-suite"></div>
+                    <div class="mapping-line" id="journey-engagement-suite"></div>
+                    <div class="mapping-line" id="journey-service-suite"></div>
+                    <div class="mapping-line" id="program-brief-creative-suite"></div>
+                    <div class="mapping-line" id="program-brief-paidmedia-suite"></div>
+                    <div class="mapping-line" id="optimization-paidmedia-suite"></div>
+                    <div class="mapping-line" id="optimization-personalization-suite"></div>
+
+                    <div class="mapping-line" id="audience-journey"></div>
+                    <div class="mapping-line" id="program-brief-audience"></div>
+                    <div class="mapping-line" id="program-brief-optimization"></div>
+                    <div class="mapping-line" id="performance-analysis-optimization"></div>
+                    <div class="mapping-line" id="performance-analysis-data-onboarding"></div>
+                    <div class="mapping-line" id="performance-analysis-idu-agent"></div>
+                    <div class="mapping-line" id="data-onboarding-audience"></div>
+                    <div class="mapping-line" id="data-onboarding-idu-agent"></div>
+                    <div class="mapping-line" id="idu-agent-journey"></div>
+
+                    <div class="mapping-line" id="retail-audience"></div>
+                    <div class="mapping-line" id="retail-journey"></div>
+                    <div class="mapping-line" id="hospitality-journey"></div>
+                    <div class="mapping-line" id="hospitality-personalization-suite"></div>
+                    <div class="mapping-line" id="gaming-engagement-suite"></div>
+                    <div class="mapping-line" id="gaming-optimization"></div>
+                </div>
+
+                <div class="mapping-controls">
+                    <button class="mapping-btn active" onclick="showAllMappingConnections()">All Connections</button>
+                    <button class="mapping-btn" onclick="showSuiteMappingConnections()">Suite Flow</button>
+                    <button class="mapping-btn" onclick="showCrossMappingConnections()">Cross-Suite</button>
+                    <button class="mapping-btn" onclick="showFieldMappingConnections()">Field & Custom</button>
+                    <button class="mapping-btn" onclick="clearMappingConnections()">Clear</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visual Diagram -->
+        <div class="visual-diagram">
+            <div class="diagram-title">🎯 Architecture Visualization</div>
+            <div class="diagram-container">
+                <div class="diagram-layer">
+                    <div class="diagram-layer-title">
+                        <span>🎯</span>
+                        SuperAgent Core
+                    </div>
+                    <div class="diagram-layer-items">
+                        <span class="diagram-layer-item">Natural Language Interface</span>
+                        <span class="diagram-layer-item">Task Routing</span>
+                        <span class="diagram-layer-item">Context Memory</span>
+                        <span class="diagram-layer-item">Insights Layer</span>
+                    </div>
+                </div>
+                <div class="diagram-layer">
+                    <div class="diagram-layer-title">
+                        <span>🔗</span>
+                        Cross-Suite Foundation (AI Agent Foundry + ICDP)
+                    </div>
+                    <div class="diagram-layer-items">
+                        <span class="diagram-layer-item">Audience Agent</span>
+                        <span class="diagram-layer-item">Journey Agent</span>
+                        <span class="diagram-layer-item">Program Brief Agent</span>
+                        <span class="diagram-layer-item">Optimization Agent</span>
+                        <span class="diagram-layer-item">Performance Analysis Agent</span>
+                        <span class="diagram-layer-item">Data Onboarding Agent</span>
+                        <span class="diagram-layer-item">IDU Agent</span>
+                    </div>
+                </div>
+                <div class="diagram-layer">
+                    <div class="diagram-layer-title">
+                        <span>📦</span>
+                        Suite-Specific Agents
+                    </div>
+                    <div class="diagram-layer-items">
+                        <span class="diagram-layer-item">Engagement Suite</span>
+                        <span class="diagram-layer-item">Creative Suite</span>
+                        <span class="diagram-layer-item">Service Suite</span>
+                        <span class="diagram-layer-item">Paid Media Suite</span>
+                        <span class="diagram-layer-item">Personalization Suite</span>
+                    </div>
+                </div>
+                <div class="diagram-layer">
+                    <div class="diagram-layer-title">
+                        <span>⚡</span>
+                        Field & Custom Agents
+                    </div>
+                    <div class="diagram-layer-items">
+                        <span class="diagram-layer-item">Retail Agent</span>
+                        <span class="diagram-layer-item">Hospitality Agent</span>
+                        <span class="diagram-layer-item">Gaming Agent</span>
+                        <span class="diagram-layer-item">Custom Agents</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Multi-Agent Collaboration Example -->
+        <div class="flow-example">
+            <div class="flow-title">🔄 Example Flow: Multi-Agent Collaboration</div>
+            <div style="background: rgba(15, 23, 42, 0.6); border-radius: 12px; padding: 20px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1);">
+                <div style="color: #10b981; font-weight: 600; margin-bottom: 10px;">User Request:</div>
+                <div style="color: #cbd5e1;">"Create a new paid campaign for holiday sales."</div>
+            </div>
+            <div class="flow-steps">
+                <div class="flow-step">
+                    <div class="flow-step-number">1</div>
+                    <div class="flow-step-content">
+                        <div class="flow-step-title">Program Brief Agent</div>
+                        <div class="flow-step-description">Defines objective, budget, and channel strategy</div>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-step-number">2</div>
+                    <div class="flow-step-content">
+                        <div class="flow-step-title">Audience Agent</div>
+                        <div class="flow-step-description">Identifies optimal target segments and personas</div>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-step-number">3</div>
+                    <div class="flow-step-content">
+                        <div class="flow-step-title">Creative Agent</div>
+                        <div class="flow-step-description">Generates creative brief and asset recommendations</div>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-step-number">4</div>
+                    <div class="flow-step-content">
+                        <div class="flow-step-title">Optimization Agent</div>
+                        <div class="flow-step-description">Calculates projected ROAS and spend allocation</div>
+                    </div>
+                </div>
+            </div>
+            <div style="background: rgba(16, 185, 129, 0.1); border-radius: 12px; padding: 20px; margin-top: 25px; border: 1px solid rgba(16, 185, 129, 0.3);">
+                <div style="color: #22c55e; font-weight: 600; margin-bottom: 10px;">✅ Output:</div>
+                <div style="color: #cbd5e1;">Full campaign plan ready for review and activation across platforms</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Relationship Mapping JavaScript
+        const mappingConnections = {
+            'superagent-core': ['creative-suite', 'engagement-suite', 'paidmedia-suite', 'service-suite', 'personalization-suite', 'audience', 'journey', 'program-brief', 'optimization'],
+            'creative-suite': ['superagent-core', 'audience', 'program-brief'],
+            'engagement-suite': ['superagent-core', 'audience', 'journey', 'gaming'],
+            'paidmedia-suite': ['superagent-core', 'audience', 'program-brief', 'optimization'],
+            'service-suite': ['superagent-core', 'journey'],
+            'personalization-suite': ['superagent-core', 'audience', 'optimization', 'hospitality'],
+            'audience': ['superagent-core', 'creative-suite', 'engagement-suite', 'paidmedia-suite', 'personalization-suite', 'journey', 'program-brief', 'data-onboarding', 'retail'],
+            'journey': ['superagent-core', 'engagement-suite', 'service-suite', 'audience', 'idu-agent', 'retail', 'hospitality'],
+            'program-brief': ['superagent-core', 'creative-suite', 'paidmedia-suite', 'audience', 'optimization'],
+            'optimization': ['superagent-core', 'paidmedia-suite', 'personalization-suite', 'program-brief', 'performance-analysis', 'gaming'],
+            'performance-analysis': ['optimization', 'data-onboarding', 'idu-agent'],
+            'data-onboarding': ['audience', 'performance-analysis', 'idu-agent'],
+            'idu-agent': ['journey', 'performance-analysis', 'data-onboarding'],
+            'retail': ['audience', 'journey'],
+            'hospitality': ['journey', 'personalization-suite'],
+            'gaming': ['engagement-suite', 'optimization']
+        };
+
+        function highlightMappingConnections(agentId) {
+            clearMappingHighlights();
+
+            const agent = document.getElementById(agentId);
+            if (agent) {
+                agent.classList.add('active');
+            }
+
+            if (mappingConnections[agentId]) {
+                mappingConnections[agentId].forEach(targetId => {
+                    const connectionLine = document.getElementById(`${agentId}-${targetId}`) ||
+                                         document.getElementById(`${targetId}-${agentId}`);
+                    if (connectionLine) {
+                        connectionLine.classList.add('active');
+                        updateMappingConnectionPosition(agentId, targetId);
+                    }
+
+                    const targetAgent = document.getElementById(targetId);
+                    if (targetAgent) {
+                        targetAgent.style.opacity = '1';
+                        targetAgent.style.transform = 'scale(1.05)';
+                    }
+                });
+            }
+        }
+
+        function clearMappingHighlights() {
+            document.querySelectorAll('.mapping-node').forEach(node => {
+                node.classList.remove('active');
+                node.style.opacity = '1';
+                node.style.transform = '';
+            });
+
+            document.querySelectorAll('.mapping-line').forEach(line => {
+                line.classList.remove('active');
+            });
+        }
+
+        function updateMappingConnectionPosition(agent1, agent2) {
+            const node1 = document.getElementById(agent1);
+            const node2 = document.getElementById(agent2);
+            const line = document.getElementById(`${agent1}-${agent2}`) ||
+                        document.getElementById(`${agent2}-${agent1}`);
+
+            if (node1 && node2 && line) {
+                const canvas = document.getElementById('mapping-canvas');
+                const canvasRect = canvas.getBoundingClientRect();
+                const rect1 = node1.getBoundingClientRect();
+                const rect2 = node2.getBoundingClientRect();
+
+                const x1 = rect1.left - canvasRect.left + rect1.width / 2;
+                const y1 = rect1.top - canvasRect.top + rect1.height / 2;
+                const x2 = rect2.left - canvasRect.left + rect2.width / 2;
+                const y2 = rect2.top - canvasRect.top + rect2.height / 2;
+
+                const length = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+                const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+
+                line.style.width = `${length}px`;
+                line.style.left = `${x1}px`;
+                line.style.top = `${y1}px`;
+                line.style.transform = `rotate(${angle}deg)`;
+                line.style.transformOrigin = '0 50%';
+            }
+        }
+
+        function showAllMappingConnections() {
+            clearMappingConnections();
+            updateMappingControlButtons('All Connections');
+            Object.keys(mappingConnections).forEach(agentId => {
+                if (mappingConnections[agentId]) {
+                    mappingConnections[agentId].forEach(targetId => {
+                        const connectionLine = document.getElementById(`${agentId}-${targetId}`) ||
+                                             document.getElementById(`${targetId}-${agentId}`);
+                        if (connectionLine) {
+                            connectionLine.classList.add('active');
+                            updateMappingConnectionPosition(agentId, targetId);
+                        }
+                    });
+                }
+            });
+        }
+
+        function showSuiteMappingConnections() {
+            clearMappingConnections();
+            updateMappingControlButtons('Suite Flow');
+            ['creative-suite', 'engagement-suite', 'paidmedia-suite', 'service-suite', 'personalization-suite'].forEach(agentId => {
+                highlightMappingConnections(agentId);
+            });
+        }
+
+        function showCrossMappingConnections() {
+            clearMappingConnections();
+            updateMappingControlButtons('Cross-Suite');
+            ['audience', 'journey', 'program-brief', 'optimization', 'performance-analysis', 'data-onboarding', 'idu-agent'].forEach(agentId => {
+                highlightMappingConnections(agentId);
+            });
+        }
+
+        function showFieldMappingConnections() {
+            clearMappingConnections();
+            updateMappingControlButtons('Field & Custom');
+            ['retail', 'hospitality', 'gaming'].forEach(agentId => {
+                highlightMappingConnections(agentId);
+            });
+        }
+
+        function clearMappingConnections() {
+            clearMappingHighlights();
+            updateMappingControlButtons('Clear');
+        }
+
+        function updateMappingControlButtons(activeButton) {
+            document.querySelectorAll('.mapping-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent === activeButton) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        // Initialize mapping connection positions
+        window.addEventListener('load', () => {
+            Object.keys(mappingConnections).forEach(agent1 => {
+                if (mappingConnections[agent1]) {
+                    mappingConnections[agent1].forEach(agent2 => {
+                        updateMappingConnectionPosition(agent1, agent2);
+                    });
+                }
+            });
+
+            // Initialize with all connections showing
+            setTimeout(showAllMappingConnections, 500);
+        });
+
+        // Update positions on resize
+        window.addEventListener('resize', () => {
+            Object.keys(mappingConnections).forEach(agent1 => {
+                if (mappingConnections[agent1]) {
+                    mappingConnections[agent1].forEach(agent2 => {
+                        updateMappingConnectionPosition(agent1, agent2);
+                    });
+                }
+            });
+        });
+    </script>
+        </div>
+    </div>
+</body>
+</html>

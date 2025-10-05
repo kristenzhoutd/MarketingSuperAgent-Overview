@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketing SuperAgent - Relationship Mapping</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            overflow: hidden;
+        }
+
+        /* Header Navigation */
+        .top-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1500;
+            padding: 0 20px;
+        }
+
+        .nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 80px;
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: 700;
+            color: #f1f5f9;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: #6366f1;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 8px 0;
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 1000;
+            list-style: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu li {
+            padding: 0;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 12px 20px;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            border-radius: 8px;
+            margin: 0 8px;
+        }
+
+        .dropdown-menu a:hover {
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .nav {
+                justify-content: space-between;
+            }
+        }
+
+        .container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            background: radial-gradient(circle at 30% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 90% 10%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+        }
+
+        .header {
+            position: absolute;
+            top: 100px;
+            left: 20px;
+            right: 20px;
+            text-align: center;
+            z-index: 100;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        .canvas {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .agent-node {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 15px 20px;
+            min-width: 140px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .agent-node:hover {
+            transform: scale(1.15);
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
+            z-index: 50;
+        }
+
+        .agent-node.active {
+            background: rgba(139, 92, 246, 0.3);
+            border-color: #8b5cf6;
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+            transform: scale(1.2);
+            z-index: 50;
+        }
+
+        .agent-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .agent-name {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .agent-type {
+            font-size: 10px;
+            opacity: 0.7;
+        }
+
+        .suite-agent {
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+
+        .suite-agent:hover,
+        .suite-agent.active {
+            border-color: #3b82f6;
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+        }
+
+        .cross-agent {
+            border-color: rgba(16, 185, 129, 0.5);
+        }
+
+        .cross-agent:hover,
+        .cross-agent.active {
+            border-color: #10b981;
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.5);
+        }
+
+        .field-agent {
+            border-color: rgba(245, 158, 11, 0.5);
+        }
+
+        .field-agent:hover,
+        .field-agent.active {
+            border-color: #f59e0b;
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.5);
+        }
+
+        .connection-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, #8b5cf6, #3b82f6, #10b981);
+            opacity: 0;
+            transition: all 0.5s ease;
+            z-index: 1;
+            border-radius: 1px;
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+        }
+
+        .connection-line.active {
+            opacity: 0.8;
+            animation: pulse 2s infinite, flow 3s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes flow {
+            0% { background-position: 0 0; }
+            100% { background-position: 100px 0; }
+        }
+
+        .controls {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .control-btn {
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .control-btn.active {
+            background: rgba(139, 92, 246, 0.3);
+            border-color: #8b5cf6;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+        }
+
+
+        .legend {
+            position: absolute;
+            top: 80px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+
+        .legend h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #e2e8f0;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .suite-color { background: #3b82f6; }
+        .cross-color { background: #10b981; }
+        .field-color { background: #f59e0b; }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .header p {
+                font-size: 0.9rem;
+            }
+
+            .controls {
+                flex-wrap: wrap;
+                bottom: 20px;
+            }
+
+            .control-btn {
+                padding: 8px 15px;
+                font-size: 12px;
+            }
+
+            .legend {
+                right: 10px;
+                padding: 15px;
+            }
+
+            .agent-node {
+                min-width: 100px;
+                padding: 10px 15px;
+            }
+
+            .agent-name {
+                font-size: 11px;
+            }
+
+            .agent-icon {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header class="top-header">
+        <nav class="nav">
+            <a href="index.html" class="logo">Marketing SuperAgent</a>
+            <ul class="nav-links">
+                <li><a href="index.html#overview">Overview</a></li>
+                <li class="dropdown">
+                    <a href="index.html#business">Business Strategy</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="business-strategy.html">Business Context</a></li>
+                        <li><a href="early-prototypes.html">Early Prototypes & POCs</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="index.html#ecosystem">Core Ecosystem</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="ecosystem-architecture.html">Agent Ecosystem</a></li>
+                        <li><a href="superagent-relationships.html">Agent Relationships</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="index.html#technical">Technical Implementation</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="builder-architecture.html">Builder & Architecture</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="index.html#ux">AI Native Experience</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="ux-interaction-design.html">UX & Interaction</a></li>
+                        <li><a href="collaboration-modes.html">Collaboration Modes</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+
+        <div class="header">
+            <h1>🔗 Agent Relationship Mapping</h1>
+            <p>Interactive visualization of agent connections, data flows, and collaboration patterns</p>
+        </div>
+
+        <div class="legend">
+            <h3>Agent Types</h3>
+            <div class="legend-item">
+                <div class="legend-color suite-color"></div>
+                <span>Suite-Specific</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color cross-color"></div>
+                <span>Cross-Suite</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color field-color"></div>
+                <span>Field & Custom</span>
+            </div>
+        </div>
+
+        <div class="canvas" id="canvas">
+            <!-- SuperAgent Core -->
+            <div class="agent-node" id="superagent-core" style="top: 10%; left: 50%; transform: translateX(-50%); background: rgba(139, 92, 246, 0.3); border-color: #8b5cf6;"
+                 onmouseover="highlightConnections('superagent-core')" onmouseout="clearHighlights()">
+                <div class="agent-icon">🎯</div>
+                <div class="agent-name">SuperAgent Core</div>
+                <div class="agent-type">Orchestration</div>
+            </div>
+
+            <!-- Suite-Specific Agents -->
+            <div class="agent-node suite-agent" id="creative-suite" style="top: 25%; left: 15%;"
+                 onmouseover="highlightConnections('creative-suite')" onmouseout="clearHighlights()">
+                <div class="agent-icon">🎨</div>
+                <div class="agent-name">Creative Suite</div>
+                <div class="agent-type">Suite-Specific</div>
+            </div>
+
+            <div class="agent-node suite-agent" id="engagement-suite" style="top: 25%; right: 15%;"
+                 onmouseover="highlightConnections('engagement-suite')" onmouseout="clearHighlights()">
+                <div class="agent-icon">📱</div>
+                <div class="agent-name">Engagement Suite</div>
+                <div class="agent-type">Suite-Specific</div>
+            </div>
+
+            <div class="agent-node suite-agent" id="paidmedia-suite" style="top: 40%; left: 5%;"
+                 onmouseover="highlightConnections('paidmedia-suite')" onmouseout="clearHighlights()">
+                <div class="agent-icon">💰</div>
+                <div class="agent-name">Paid Media Suite</div>
+                <div class="agent-type">Suite-Specific</div>
+            </div>
+
+            <div class="agent-node suite-agent" id="service-suite" style="top: 40%; right: 5%;"
+                 onmouseover="highlightConnections('service-suite')" onmouseout="clearHighlights()">
+                <div class="agent-icon">🛠️</div>
+                <div class="agent-name">Service Suite</div>
+                <div class="agent-type">Suite-Specific</div>
+            </div>
+
+            <div class="agent-node suite-agent" id="personalization-suite" style="top: 55%; left: 10%;"
+                 onmouseover="highlightConnections('personalization-suite')" onmouseout="clearHighlights()">
+                <div class="agent-icon">👤</div>
+                <div class="agent-name">Personalization Suite</div>
+                <div class="agent-type">Suite-Specific</div>
+            </div>
+
+            <!-- Cross-Suite Foundation (AI Agent Foundry + ICDP) -->
+            <div class="agent-node cross-agent" id="audience" style="top: 45%; left: 35%;"
+                 onmouseover="highlightConnections('audience')" onmouseout="clearHighlights()">
+                <div class="agent-icon">👥</div>
+                <div class="agent-name">Audience Agent</div>
+                <div class="agent-type">Cross-Suite</div>
+            </div>
+
+            <div class="agent-node cross-agent" id="journey" style="top: 45%; right: 35%;"
+                 onmouseover="highlightConnections('journey')" onmouseout="clearHighlights()">
+                <div class="agent-icon">🗺️</div>
+                <div class="agent-name">Journey Agent</div>
+                <div class="agent-type">Cross-Suite</div>
+            </div>
+
+            <div class="agent-node cross-agent" id="program-brief" style="top: 60%; left: 30%;"
+                 onmouseover="highlightConnections('program-brief')" onmouseout="clearHighlights()">
+                <div class="agent-icon">📋</div>
+                <div class="agent-name">Program Brief Agent</div>
+                <div class="agent-type">Cross-Suite</div>
+            </div>
+
+            <div class="agent-node cross-agent" id="optimization" style="top: 60%; right: 30%;"
+                 onmouseover="highlightConnections('optimization')" onmouseout="clearHighlights()">
+                <div class="agent-icon">⚡</div>
+                <div class="agent-name">Optimization Agent</div>
+                <div class="agent-type">Cross-Suite</div>
+            </div>
+
+            <div class="agent-node cross-agent" id="performance-analysis" style="top: 75%; left: 25%;"
+                 onmouseover="highlightConnections('performance-analysis')" onmouseout="clearHighlights()">
+                <div class="agent-icon">📊</div>
+                <div class="agent-name">Performance Analysis Agent</div>
+                <div class="agent-type">Cross-Suite</div>
+            </div>
+
+            <div class="agent-node cross-agent" id="data-onboarding" style="top: 75%; left: 50%; transform: translateX(-50%);"
+                 onmouseover="highlightConnections('data-onboarding')" onmouseout="clearHighlights()">
+                <div class="agent-icon">📥</div>
+                <div class="agent-name">Data Onboarding Agent</div>
+                <div class="agent-type">Cross-Suite</div>
+            </div>
+
+            <div class="agent-node cross-agent" id="idu-agent" style="top: 75%; right: 25%;"
+                 onmouseover="highlightConnections('idu-agent')" onmouseout="clearHighlights()">
+                <div class="agent-icon">💎</div>
+                <div class="agent-name">IDU Agent</div>
+                <div class="agent-type">Cross-Suite</div>
+            </div>
+
+            <!-- Field & Custom Agents -->
+            <div class="agent-node field-agent" id="retail" style="bottom: 10%; left: 15%;"
+                 onmouseover="highlightConnections('retail')" onmouseout="clearHighlights()">
+                <div class="agent-icon">🏪</div>
+                <div class="agent-name">Retail Agent</div>
+                <div class="agent-type">Field & Custom</div>
+            </div>
+
+            <div class="agent-node field-agent" id="hospitality" style="bottom: 10%; left: 50%; transform: translateX(-50%);"
+                 onmouseover="highlightConnections('hospitality')" onmouseout="clearHighlights()">
+                <div class="agent-icon">🏨</div>
+                <div class="agent-name">Hospitality Agent</div>
+                <div class="agent-type">Field & Custom</div>
+            </div>
+
+            <div class="agent-node field-agent" id="gaming" style="bottom: 10%; right: 15%;"
+                 onmouseover="highlightConnections('gaming')" onmouseout="clearHighlights()">
+                <div class="agent-icon">🎮</div>
+                <div class="agent-name">Gaming Agent</div>
+                <div class="agent-type">Field & Custom</div>
+            </div>
+
+            <div class="agent-node field-agent" id="custom-agent" style="bottom: 25%; right: 5%;"
+                 onmouseover="highlightConnections('custom-agent')" onmouseout="clearHighlights()">
+                <div class="agent-icon">🔧</div>
+                <div class="agent-name">Custom Agent</div>
+                <div class="agent-type">Field & Custom</div>
+            </div>
+
+            <!-- Connection Lines -->
+            <!-- SuperAgent Core connections -->
+            <div class="connection-line" id="superagent-core-creative-suite"></div>
+            <div class="connection-line" id="superagent-core-engagement-suite"></div>
+            <div class="connection-line" id="superagent-core-paidmedia-suite"></div>
+            <div class="connection-line" id="superagent-core-service-suite"></div>
+            <div class="connection-line" id="superagent-core-personalization-suite"></div>
+            <div class="connection-line" id="superagent-core-audience"></div>
+            <div class="connection-line" id="superagent-core-journey"></div>
+            <div class="connection-line" id="superagent-core-program-brief"></div>
+            <div class="connection-line" id="superagent-core-optimization"></div>
+
+            <!-- Cross-Suite to Suite connections -->
+            <div class="connection-line" id="audience-creative-suite"></div>
+            <div class="connection-line" id="audience-engagement-suite"></div>
+            <div class="connection-line" id="audience-paidmedia-suite"></div>
+            <div class="connection-line" id="audience-personalization-suite"></div>
+            <div class="connection-line" id="journey-engagement-suite"></div>
+            <div class="connection-line" id="journey-service-suite"></div>
+            <div class="connection-line" id="program-brief-creative-suite"></div>
+            <div class="connection-line" id="program-brief-paidmedia-suite"></div>
+            <div class="connection-line" id="optimization-paidmedia-suite"></div>
+            <div class="connection-line" id="optimization-personalization-suite"></div>
+
+            <!-- Cross-Suite internal connections -->
+            <div class="connection-line" id="audience-journey"></div>
+            <div class="connection-line" id="program-brief-audience"></div>
+            <div class="connection-line" id="program-brief-optimization"></div>
+            <div class="connection-line" id="performance-analysis-optimization"></div>
+            <div class="connection-line" id="performance-analysis-data-onboarding"></div>
+            <div class="connection-line" id="performance-analysis-idu-agent"></div>
+            <div class="connection-line" id="data-onboarding-audience"></div>
+            <div class="connection-line" id="data-onboarding-idu-agent"></div>
+            <div class="connection-line" id="idu-agent-journey"></div>
+
+            <!-- Field & Custom connections -->
+            <div class="connection-line" id="retail-audience"></div>
+            <div class="connection-line" id="retail-journey"></div>
+            <div class="connection-line" id="hospitality-journey"></div>
+            <div class="connection-line" id="hospitality-personalization-suite"></div>
+            <div class="connection-line" id="gaming-engagement-suite"></div>
+            <div class="connection-line" id="gaming-optimization"></div>
+            <div class="connection-line" id="custom-agent-superagent-core"></div>
+        </div>
+
+        <div class="controls">
+            <button class="control-btn active" onclick="showAll()">All Connections</button>
+            <button class="control-btn" onclick="showSuiteConnections()">Suite Flow</button>
+            <button class="control-btn" onclick="showCrossConnections()">Cross-Suite</button>
+            <button class="control-btn" onclick="showFieldConnections()">Field & Custom</button>
+            <button class="control-btn" onclick="clearConnections()">Clear</button>
+        </div>
+    </div>
+
+    <script>
+        const connections = {
+            'superagent-core': ['creative-suite', 'engagement-suite', 'paidmedia-suite', 'service-suite', 'personalization-suite', 'audience', 'journey', 'program-brief', 'optimization'],
+            'creative-suite': ['superagent-core', 'audience', 'program-brief'],
+            'engagement-suite': ['superagent-core', 'audience', 'journey', 'gaming'],
+            'paidmedia-suite': ['superagent-core', 'audience', 'program-brief', 'optimization'],
+            'service-suite': ['superagent-core', 'journey'],
+            'personalization-suite': ['superagent-core', 'audience', 'optimization', 'hospitality'],
+            'audience': ['superagent-core', 'creative-suite', 'engagement-suite', 'paidmedia-suite', 'personalization-suite', 'journey', 'program-brief', 'data-onboarding', 'retail'],
+            'journey': ['superagent-core', 'engagement-suite', 'service-suite', 'audience', 'idu-agent', 'retail', 'hospitality'],
+            'program-brief': ['superagent-core', 'creative-suite', 'paidmedia-suite', 'audience', 'optimization'],
+            'optimization': ['superagent-core', 'paidmedia-suite', 'personalization-suite', 'program-brief', 'performance-analysis', 'gaming'],
+            'performance-analysis': ['optimization', 'data-onboarding', 'idu-agent'],
+            'data-onboarding': ['audience', 'performance-analysis', 'idu-agent'],
+            'idu-agent': ['journey', 'performance-analysis', 'data-onboarding'],
+            'retail': ['audience', 'journey'],
+            'hospitality': ['journey', 'personalization-suite'],
+            'gaming': ['engagement-suite', 'optimization'],
+            'custom-agent': ['superagent-core']
+        };
+
+        function highlightConnections(agentId) {
+            clearHighlights();
+
+            const agent = document.getElementById(agentId);
+            agent.classList.add('active');
+
+            if (connections[agentId]) {
+                connections[agentId].forEach(targetId => {
+                    const connectionLine = document.getElementById(`${agentId}-${targetId}`) ||
+                                         document.getElementById(`${targetId}-${agentId}`);
+                    if (connectionLine) {
+                        connectionLine.classList.add('active');
+                        updateConnectionPosition(agentId, targetId);
+                    }
+
+                    const targetAgent = document.getElementById(targetId);
+                    if (targetAgent) {
+                        targetAgent.style.opacity = '1';
+                        targetAgent.style.transform = 'scale(1.1)';
+                    }
+                });
+            }
+        }
+
+        function clearHighlights() {
+            document.querySelectorAll('.agent-node').forEach(node => {
+                node.classList.remove('active');
+                node.style.opacity = '1';
+                node.style.transform = '';
+            });
+
+            document.querySelectorAll('.connection-line').forEach(line => {
+                line.classList.remove('active');
+            });
+        }
+
+        function updateConnectionPosition(agent1, agent2) {
+            const node1 = document.getElementById(agent1);
+            const node2 = document.getElementById(agent2);
+            const line = document.getElementById(`${agent1}-${agent2}`) ||
+                        document.getElementById(`${agent2}-${agent1}`);
+
+            if (node1 && node2 && line) {
+                const rect1 = node1.getBoundingClientRect();
+                const rect2 = node2.getBoundingClientRect();
+                const canvas = document.getElementById('canvas').getBoundingClientRect();
+
+                const x1 = rect1.left - canvas.left + rect1.width / 2;
+                const y1 = rect1.top - canvas.top + rect1.height / 2;
+                const x2 = rect2.left - canvas.left + rect2.width / 2;
+                const y2 = rect2.top - canvas.top + rect2.height / 2;
+
+                const length = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+                const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+
+                line.style.width = `${length}px`;
+                line.style.left = `${x1}px`;
+                line.style.top = `${y1}px`;
+                line.style.transform = `rotate(${angle}deg)`;
+                line.style.transformOrigin = '0 50%';
+            }
+        }
+
+        function showAll() {
+            clearConnections();
+            updateControlButtons('All Connections');
+            Object.keys(connections).forEach(agentId => {
+                if (connections[agentId]) {
+                    connections[agentId].forEach(targetId => {
+                        const connectionLine = document.getElementById(`${agentId}-${targetId}`) ||
+                                             document.getElementById(`${targetId}-${agentId}`);
+                        if (connectionLine) {
+                            connectionLine.classList.add('active');
+                            updateConnectionPosition(agentId, targetId);
+                        }
+                    });
+                }
+            });
+        }
+
+        function showSuiteConnections() {
+            clearConnections();
+            updateControlButtons('Suite Flow');
+            ['creative-suite', 'engagement-suite', 'paidmedia-suite', 'service-suite', 'personalization-suite'].forEach(agentId => {
+                highlightConnections(agentId);
+            });
+        }
+
+        function showCrossConnections() {
+            clearConnections();
+            updateControlButtons('Cross-Suite');
+            ['audience', 'journey', 'program-brief', 'optimization', 'performance-analysis', 'data-onboarding', 'idu-agent'].forEach(agentId => {
+                highlightConnections(agentId);
+            });
+        }
+
+        function showFieldConnections() {
+            clearConnections();
+            updateControlButtons('Field & Custom');
+            ['retail', 'hospitality', 'gaming', 'custom-agent'].forEach(agentId => {
+                highlightConnections(agentId);
+            });
+        }
+
+        function clearConnections() {
+            clearHighlights();
+            updateControlButtons('Clear');
+        }
+
+        function updateControlButtons(activeButton) {
+            document.querySelectorAll('.control-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent === activeButton) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        // Initialize connection positions
+        window.addEventListener('load', () => {
+            Object.keys(connections).forEach(agent1 => {
+                if (connections[agent1]) {
+                    connections[agent1].forEach(agent2 => {
+                        updateConnectionPosition(agent1, agent2);
+                    });
+                }
+            });
+        });
+
+        // Update positions on resize
+        window.addEventListener('resize', () => {
+            Object.keys(connections).forEach(agent1 => {
+                if (connections[agent1]) {
+                    connections[agent1].forEach(agent2 => {
+                        updateConnectionPosition(agent1, agent2);
+                    });
+                }
+            });
+        });
+
+        // Initialize with all connections showing
+        setTimeout(showAll, 500);
+    </script>
+</body>
+</html>

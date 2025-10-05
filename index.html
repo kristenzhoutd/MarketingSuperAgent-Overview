@@ -290,6 +290,34 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
+            margin-top: 60px;
+        }
+
+        .section-divider {
+            text-align: center;
+            margin: 80px 0 40px 0;
+        }
+
+        .section-divider.first-section {
+            margin-top: 120px;
+        }
+
+        .section-divider h3 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+        }
+
+        .section-divider p {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
         }
 
         .viz-card {
@@ -594,6 +622,28 @@
                 grid-template-columns: 1fr;
             }
 
+            .section-divider {
+                margin: 60px 0 30px 0;
+            }
+
+            .section-divider.first-section {
+                margin-top: 80px;
+            }
+
+            .section-divider h3 {
+                font-size: 1.8rem;
+                margin-bottom: 12px;
+            }
+
+            .section-divider p {
+                font-size: 1rem;
+                padding: 0 20px;
+            }
+
+            .visualization-grid {
+                margin-top: 40px;
+            }
+
             .quick-navigation {
                 display: none;
             }
@@ -705,9 +755,8 @@
         <div class="main-content" id="visualizations">
 
             <!-- Business Strategy Section -->
-            <div class="section-divider">
+            <div class="section-divider first-section">
                 <h3 id="business">📈 Business Strategy</h3>
-                <p>Strategic context and market positioning</p>
             </div>
 
             <div class="visualization-grid">
@@ -726,12 +775,27 @@
 
                     <a href="business-strategy.html" class="btn">Explore Strategy</a>
                 </div>
+
+                <div class="viz-card">
+                    <div class="viz-icon">🚀</div>
+                    <h3>Early Prototypes & POCs</h3>
+                    <p>Live demonstrations and proof-of-concept implementations showcasing Marketing SuperAgent capabilities in action.</p>
+
+                    <ul class="viz-features">
+                        <li>Marketing SuperAgent V4 live demo</li>
+                        <li>Paid Media AI Suite prototype</li>
+                        <li>Creative AI Suite demonstration</li>
+                        <li>Thomson Reuters industry implementation</li>
+                        <li>Development POCs and beta features</li>
+                    </ul>
+
+                    <a href="early-prototypes.html" class="btn">View Prototypes</a>
+                </div>
             </div>
 
             <!-- UX & Interaction Section -->
             <div class="section-divider">
                 <h3 id="ux">💬 AI Native Experience</h3>
-                <p>Intelligent interfaces and collaboration patterns</p>
             </div>
 
             <div class="visualization-grid">
@@ -771,7 +835,6 @@
             <!-- Core Ecosystem Section -->
             <div class="section-divider">
                 <h3 id="ecosystem">🌟 AI Ecosystem</h3>
-                <p>Agent architecture and relationships</p>
             </div>
 
             <div class="visualization-grid">
@@ -811,7 +874,6 @@
             <!-- Technical Implementation Section -->
             <div class="section-divider">
                 <h3 id="technical">🛠️ Technical Implementation</h3>
-                <p>Development framework and architecture</p>
             </div>
 
             <div class="visualization-grid">
@@ -829,6 +891,22 @@
                     </ul>
 
                     <a href="builder-architecture.html" class="btn">Explore Architecture</a>
+                </div>
+
+                <div class="viz-card">
+                    <div class="viz-icon">🔧</div>
+                    <h3>Agent Builder Framework</h3>
+                    <p>Comprehensive development framework supporting multi-origin agent creation with universal capabilities and flexible deployment options.</p>
+
+                    <ul class="viz-features">
+                        <li>Product, Field, and Custom agent origins</li>
+                        <li>Universal agent capabilities (SDK/API, metadata)</li>
+                        <li>Task Agents vs Utility Agents categorization</li>
+                        <li>Cross-platform message passing system</li>
+                        <li>Flexible deployment and registration</li>
+                    </ul>
+
+                    <a href="agent-builder.html" class="btn">Explore Framework</a>
                 </div>
 
             </div>

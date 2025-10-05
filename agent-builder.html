@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Builder Framework</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header Navigation */
+        .top-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            padding: 0 20px;
+        }
+
+        .nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 80px;
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: 700;
+            color: #f1f5f9;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: #6366f1;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 8px 0;
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 1000;
+            list-style: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu li {
+            padding: 0;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 12px 20px;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            border-radius: 8px;
+            margin: 0 8px;
+        }
+
+        .dropdown-menu a:hover {
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+        }
+
+        .main-container {
+            padding-top: 80px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .nav {
+                justify-content: space-between;
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+            margin-bottom: 40px;
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="circuit" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M10,0 L10,10 M0,10 L10,10 L20,10 M10,10 L10,20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23circuit)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header .subtitle {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-description {
+            color: #cbd5e1;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .agent-origins {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .origin-card {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .origin-card:hover {
+            transform: translateY(-4px);
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .origin-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .origin-icon {
+            font-size: 24px;
+        }
+
+        .origin-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #f1f5f9;
+        }
+
+        .origin-description {
+            color: #cbd5e1;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .origin-features {
+            list-style: none;
+        }
+
+        .origin-features li {
+            color: #94a3b8;
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+            font-size: 14px;
+        }
+
+        .origin-features li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #6366f1;
+            font-weight: bold;
+        }
+
+        .capabilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .capability-item {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .capability-item:hover {
+            background: rgba(99, 102, 241, 0.15);
+            border-color: rgba(99, 102, 241, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .capability-title {
+            font-weight: 600;
+            color: #6366f1;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .capability-description {
+            color: #e2e8f0;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .agent-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .category-card {
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 16px;
+            padding: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #22c55e, #16a34a);
+        }
+
+        .category-card.utility::before {
+            background: linear-gradient(90deg, #f59e0b, #d97706);
+        }
+
+        .category-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .category-icon {
+            font-size: 32px;
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #f1f5f9;
+        }
+
+        .category-description {
+            color: #cbd5e1;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .agent-examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+        }
+
+        .agent-example {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px 16px;
+            text-align: center;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            font-weight: 500;
+            color: #e2e8f0;
+        }
+
+        .agent-example:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 768px) {
+            .agent-origins {
+                grid-template-columns: 1fr;
+            }
+
+            .capabilities-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .agent-categories {
+                grid-template-columns: 1fr;
+            }
+
+            .agent-examples {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header class="top-header">
+        <nav class="nav">
+            <a href="index.html" class="logo">Marketing SuperAgent</a>
+            <ul class="nav-links">
+                <li><a href="index.html#overview">Overview</a></li>
+                <li class="dropdown">
+                    <a href="index.html#business">Business Strategy</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="business-strategy.html">Business Context</a></li>
+                        <li><a href="early-prototypes.html">Early Prototypes & POCs</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="index.html#ux">AI Native Experience</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="ux-interaction-design.html">UX & Interaction</a></li>
+                        <li><a href="collaboration-modes.html">Collaboration Modes</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="index.html#ecosystem">AI Ecosystem</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="ecosystem-architecture.html">Agent Ecosystem</a></li>
+                        <li><a href="superagent-relationships.html">Agent Relationships</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="index.html#technical">Technical Implementation</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="builder-architecture.html">Builder & Architecture</a></li>
+                        <li><a href="agent-builder.html">Agent Builder Framework</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="main-container">
+        <div class="container">
+            <div class="header">
+                <h1>🛠️ Agent Builder Framework</h1>
+                <div class="subtitle">Multi-origin agent development, registration, and orchestration system for enterprise marketing intelligence</div>
+            </div>
+
+            <!-- Agent Origins Section -->
+            <div class="section">
+                <div class="section-title">
+                    🏭 Agent Origins & Development Models
+                </div>
+                <div class="section-description">
+                    The system supports agents across different origins, enabling diverse development approaches while maintaining seamless integration and standardized collaboration patterns.
+                </div>
+
+                <div class="agent-origins">
+                    <div class="origin-card">
+                        <div class="origin-header">
+                            <div class="origin-icon">🏢</div>
+                            <div class="origin-title">Product Agents</div>
+                        </div>
+                        <div class="origin-description">
+                            Developed by core R&D teams and tied to AI Suites for domain-specific marketing capabilities.
+                        </div>
+                        <ul class="origin-features">
+                            <li>Built by core R&D teams</li>
+                            <li>Tied to AI Suites (Engage, Paid Media, Personalization)</li>
+                            <li>Enterprise-grade quality and support</li>
+                            <li>Integrated suite licensing and deployment</li>
+                            <li>Continuous R&D feature updates</li>
+                        </ul>
+                    </div>
+
+                    <div class="origin-card">
+                        <div class="origin-header">
+                            <div class="origin-icon">🎯</div>
+                            <div class="origin-title">Field Agents</div>
+                        </div>
+                        <div class="origin-description">
+                            Built by solution engineers or professional services teams for specific customers or industry verticals.
+                        </div>
+                        <ul class="origin-features">
+                            <li>Solution engineer developed</li>
+                            <li>Customer-specific implementations</li>
+                            <li>Vertical industry specialization</li>
+                            <li>Professional services integration</li>
+                            <li>Rapid deployment and customization</li>
+                        </ul>
+                    </div>
+
+                    <div class="origin-card">
+                        <div class="origin-header">
+                            <div class="origin-icon">🔧</div>
+                            <div class="origin-title">Custom Agents</div>
+                        </div>
+                        <div class="origin-description">
+                            Built by customers or partners, may live in separate repositories but can be published into the SuperAgent environment.
+                        </div>
+                        <ul class="origin-features">
+                            <li>Customer or partner developed</li>
+                            <li>Separate repository hosting</li>
+                            <li>Publishable to SuperAgent environment</li>
+                            <li>Flexible integration patterns</li>
+                            <li>Custom business logic implementation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agent Capabilities Section -->
+            <div class="section">
+                <div class="section-title">
+                    ⚙️ Universal Agent Capabilities
+                </div>
+                <div class="section-description">
+                    Every agent, regardless of origin, must support core capabilities for seamless integration and orchestration within the SuperAgent ecosystem.
+                </div>
+
+                <div class="capabilities-grid">
+                    <div class="capability-item">
+                        <div class="capability-title">SDK/API Registration</div>
+                        <div class="capability-description">
+                            Register with SuperAgent via common SDK/API for discovery and orchestration
+                        </div>
+                    </div>
+                    <div class="capability-item">
+                        <div class="capability-title">Metadata Declaration</div>
+                        <div class="capability-description">
+                            Declare inputs, outputs, dependencies, and access scopes for proper routing
+                        </div>
+                    </div>
+                    <div class="capability-item">
+                        <div class="capability-title">Message Passing</div>
+                        <div class="capability-description">
+                            Standardized message passing protocols for inter-agent communication
+                        </div>
+                    </div>
+                    <div class="capability-item">
+                        <div class="capability-title">Shared Context</div>
+                        <div class="capability-description">
+                            Access and contribute to shared context for collaborative workflows
+                        </div>
+                    </div>
+                    <div class="capability-item">
+                        <div class="capability-title">Task Orchestration</div>
+                        <div class="capability-description">
+                            Work seamlessly with Task and Utility agents through orchestration layer
+                        </div>
+                    </div>
+                    <div class="capability-item">
+                        <div class="capability-title">Performance Monitoring</div>
+                        <div class="capability-description">
+                            Built-in telemetry and performance tracking for optimization
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agent Categories Section -->
+            <div class="section">
+                <div class="section-title">
+                    📋 Agent Categories & Types
+                </div>
+                <div class="section-description">
+                    Agents are categorized by their functional role within the marketing ecosystem, enabling clear separation of concerns and optimized collaboration patterns.
+                </div>
+
+                <div class="agent-categories">
+                    <div class="category-card task">
+                        <div class="category-header">
+                            <div class="category-icon">🎯</div>
+                            <div class="category-title">Task Agents</div>
+                        </div>
+                        <div class="category-description">
+                            Execute specific marketing or operational jobs with domain expertise and business logic implementation.
+                        </div>
+                        <div class="agent-examples">
+                            <div class="agent-example">Campaign Brief Agent</div>
+                            <div class="agent-example">Audience Agent</div>
+                            <div class="agent-example">Creative Agent</div>
+                            <div class="agent-example">Journey Agent</div>
+                            <div class="agent-example">Optimization Agent</div>
+                            <div class="agent-example">Paid Media Agent</div>
+                            <div class="agent-example">Personalization Agent</div>
+                            <div class="agent-example">Attribution Agent</div>
+                        </div>
+                    </div>
+
+                    <div class="category-card utility">
+                        <div class="category-header">
+                            <div class="category-icon">🛠️</div>
+                            <div class="category-title">Utility Agents</div>
+                        </div>
+                        <div class="category-description">
+                            Provide cross-cutting or enabling services that support task agents and enhance overall system capabilities.
+                        </div>
+                        <div class="agent-examples">
+                            <div class="agent-example">Web Search Agent</div>
+                            <div class="agent-example">Insights Agent</div>
+                            <div class="agent-example">Historical Performance Agent</div>
+                            <div class="agent-example">Knowledge Base Agent</div>
+                            <div class="agent-example">File Operations Agent</div>
+                            <div class="agent-example">Data Processing Agent</div>
+                            <div class="agent-example">Notification Agent</div>
+                            <div class="agent-example">Security Agent</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -136,11 +136,12 @@
 
         .header {
             position: absolute;
-            top: 100px;
+            top: 120px;
             left: 20px;
             right: 20px;
             text-align: center;
             z-index: 100;
+            padding-bottom: 20px;
         }
 
         .header h1 {
@@ -305,7 +306,7 @@
 
         .legend {
             position: absolute;
-            top: 80px;
+            top: 120px;
             right: 30px;
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -393,7 +394,14 @@
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a href="index.html#ecosystem">Core Ecosystem</a>
+                    <a href="index.html#ux">AI Native Experience</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="ux-interaction-design.html">UX & Interaction</a></li>
+                        <li><a href="collaboration-modes.html">Collaboration Modes</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="index.html#ecosystem">AI Ecosystem</a>
                     <ul class="dropdown-menu">
                         <li><a href="ecosystem-architecture.html">Agent Ecosystem</a></li>
                         <li><a href="superagent-relationships.html">Agent Relationships</a></li>
@@ -403,13 +411,7 @@
                     <a href="index.html#technical">Technical Implementation</a>
                     <ul class="dropdown-menu">
                         <li><a href="builder-architecture.html">Builder & Architecture</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="index.html#ux">AI Native Experience</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="ux-interaction-design.html">UX & Interaction</a></li>
-                        <li><a href="collaboration-modes.html">Collaboration Modes</a></li>
+                        <li><a href="agent-builder.html">Agent Builder Framework</a></li>
                     </ul>
                 </li>
             </ul>
@@ -441,7 +443,7 @@
 
         <div class="canvas" id="canvas">
             <!-- SuperAgent Core -->
-            <div class="agent-node" id="superagent-core" style="top: 10%; left: 50%; transform: translateX(-50%); background: rgba(139, 92, 246, 0.3); border-color: #8b5cf6;"
+            <div class="agent-node" id="superagent-core" style="top: 20%; left: 50%; transform: translateX(-50%); background: rgba(139, 92, 246, 0.3); border-color: #8b5cf6;"
                  onmouseover="highlightConnections('superagent-core')" onmouseout="clearHighlights()">
                 <div class="agent-icon">🎯</div>
                 <div class="agent-name">SuperAgent Core</div>
@@ -449,14 +451,14 @@
             </div>
 
             <!-- Suite-Specific Agents -->
-            <div class="agent-node suite-agent" id="creative-suite" style="top: 25%; left: 15%;"
+            <div class="agent-node suite-agent" id="creative-suite" style="top: 32%; left: 15%;"
                  onmouseover="highlightConnections('creative-suite')" onmouseout="clearHighlights()">
                 <div class="agent-icon">🎨</div>
                 <div class="agent-name">Creative Suite</div>
                 <div class="agent-type">Suite-Specific</div>
             </div>
 
-            <div class="agent-node suite-agent" id="engagement-suite" style="top: 25%; right: 15%;"
+            <div class="agent-node suite-agent" id="engagement-suite" style="top: 32%; right: 15%;"
                  onmouseover="highlightConnections('engagement-suite')" onmouseout="clearHighlights()">
                 <div class="agent-icon">📱</div>
                 <div class="agent-name">Engagement Suite</div>

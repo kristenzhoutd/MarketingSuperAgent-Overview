@@ -500,14 +500,7 @@
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a href="index.html#ux">AI Native Experience</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="ux-interaction-design.html">UX & Interaction</a></li>
-                        <li><a href="collaboration-modes.html">Collaboration Modes</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="index.html#ecosystem">AI Ecosystem</a>
+                    <a href="index.html#ecosystem">Core Ecosystem</a>
                     <ul class="dropdown-menu">
                         <li><a href="ecosystem-architecture.html">Agent Ecosystem</a></li>
                         <li><a href="superagent-relationships.html">Agent Relationships</a></li>
@@ -518,6 +511,13 @@
                     <ul class="dropdown-menu">
                         <li><a href="builder-architecture.html">Builder & Architecture</a></li>
                         <li><a href="agent-builder.html">Agent Builder Framework</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="index.html#ux">AI Native Experience</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="ux-interaction-design.html">UX & Interaction</a></li>
+                        <li><a href="collaboration-modes.html">Collaboration Modes</a></li>
                     </ul>
                 </li>
             </ul>

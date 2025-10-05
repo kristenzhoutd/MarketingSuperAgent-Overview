@@ -642,7 +642,14 @@
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a href="#ecosystem">Core Ecosystem</a>
+                    <a href="#ux">AI Native Experience</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="ux-interaction-design.html">UX & Interaction</a></li>
+                        <li><a href="collaboration-modes.html">Collaboration Modes</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#ecosystem">AI Ecosystem</a>
                     <ul class="dropdown-menu">
                         <li><a href="ecosystem-architecture.html">Agent Ecosystem</a></li>
                         <li><a href="superagent-relationships.html">Agent Relationships</a></li>
@@ -652,13 +659,7 @@
                     <a href="#technical">Technical Implementation</a>
                     <ul class="dropdown-menu">
                         <li><a href="builder-architecture.html">Builder & Architecture</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#ux">AI Native Experience</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="ux-interaction-design.html">UX & Interaction</a></li>
-                        <li><a href="collaboration-modes.html">Collaboration Modes</a></li>
+                        <li><a href="agent-builder.html">Agent Builder Framework</a></li>
                     </ul>
                 </li>
             </ul>
@@ -728,9 +729,49 @@
                 </div>
             </div>
 
+            <!-- UX & Interaction Section -->
+            <div class="section-divider">
+                <h3 id="ux">💬 AI Native Experience</h3>
+                <p>Intelligent interfaces and collaboration patterns</p>
+            </div>
+
+            <div class="visualization-grid">
+                <div class="viz-card ux-card">
+                    <div class="viz-icon">💬</div>
+                    <h3>UX & Interaction</h3>
+                    <p>Natural language-first interface with intelligent UI confirmations, real-time reasoning display, and contextual upsells.</p>
+
+                    <ul class="viz-features">
+                        <li>Conversational AI-driven workflows</li>
+                        <li>Smart confirmation checkpoints</li>
+                        <li>Real-time agent reasoning display</li>
+                        <li>Contextual upsell integration</li>
+                        <li>WCAG AA accessibility standards</li>
+                    </ul>
+
+                    <a href="ux-interaction-design.html" class="btn">Explore UX Design</a>
+                </div>
+
+                <div class="viz-card">
+                    <div class="viz-icon">🤝</div>
+                    <h3>Collaboration Modes</h3>
+                    <p>Multi-agent and human collaboration patterns for enterprise workflow orchestration, including autonomous agent coordination, interactive workflows, and shared workspaces.</p>
+
+                    <ul class="viz-features">
+                        <li>Agent-to-agent autonomous collaboration</li>
+                        <li>Human-agent interactive workflows</li>
+                        <li>Pause, modify, and resume capabilities</li>
+                        <li>Multi-user shared workspaces</li>
+                        <li>Autopilot and scheduled operations</li>
+                    </ul>
+
+                    <a href="collaboration-modes.html" class="btn">Explore Collaboration</a>
+                </div>
+            </div>
+
             <!-- Core Ecosystem Section -->
             <div class="section-divider">
-                <h3 id="ecosystem">🌟 Core Ecosystem</h3>
+                <h3 id="ecosystem">🌟 AI Ecosystem</h3>
                 <p>Agent architecture and relationships</p>
             </div>
 
@@ -793,46 +834,6 @@
 
             </div>
 
-            <!-- UX & Interaction Section -->
-            <div class="section-divider">
-                <h3 id="ux">💬 AI Native Experience</h3>
-                <p>Intelligent interfaces and collaboration patterns</p>
-            </div>
-
-            <div class="visualization-grid">
-                <div class="viz-card ux-card">
-                    <div class="viz-icon">💬</div>
-                    <h3>UX & Interaction</h3>
-                    <p>Natural language-first interface with intelligent UI confirmations, real-time reasoning display, and contextual upsells.</p>
-
-                    <ul class="viz-features">
-                        <li>Conversational AI-driven workflows</li>
-                        <li>Smart confirmation checkpoints</li>
-                        <li>Real-time agent reasoning display</li>
-                        <li>Contextual upsell integration</li>
-                        <li>WCAG AA accessibility standards</li>
-                    </ul>
-
-                    <a href="ux-interaction-design.html" class="btn">Explore UX Design</a>
-                </div>
-
-                <div class="viz-card">
-                    <div class="viz-icon">🤝</div>
-                    <h3>Collaboration Modes</h3>
-                    <p>Multi-agent and human collaboration patterns for enterprise workflow orchestration, including autonomous agent coordination, interactive workflows, and shared workspaces.</p>
-
-                    <ul class="viz-features">
-                        <li>Agent-to-agent autonomous collaboration</li>
-                        <li>Human-agent interactive workflows</li>
-                        <li>Pause, modify, and resume capabilities</li>
-                        <li>Multi-user shared workspaces</li>
-                        <li>Autopilot and scheduled operations</li>
-                    </ul>
-
-                    <a href="collaboration-modes.html" class="btn">Explore Collaboration</a>
-                </div>
-            </div>
-
         </div>
 
         </div>
@@ -842,9 +843,9 @@
     <div class="quick-navigation">
         <div class="nav-dot active" onclick="scrollToSection('overview')"></div>
         <div class="nav-dot" onclick="scrollToSection('business')"></div>
+        <div class="nav-dot" onclick="scrollToSection('ux')"></div>
         <div class="nav-dot" onclick="scrollToSection('ecosystem')"></div>
         <div class="nav-dot" onclick="scrollToSection('technical')"></div>
-        <div class="nav-dot" onclick="scrollToSection('ux')"></div>
     </div>
 
     <script>
@@ -862,7 +863,7 @@
 
         // Update navigation dots on scroll
         window.addEventListener('scroll', () => {
-            const sections = ['overview', 'business', 'ecosystem', 'technical', 'ux'];
+            const sections = ['overview', 'business', 'ux', 'ecosystem', 'technical'];
             const scrollPosition = window.scrollY + window.innerHeight / 2;
 
             sections.forEach((sectionId, index) => {

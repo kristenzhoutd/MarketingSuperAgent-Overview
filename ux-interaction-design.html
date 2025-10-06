@@ -475,6 +475,121 @@
             transform: translateY(-1px);
         }
 
+        /* Core UX Principle Section */
+        .core-principle {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 60px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .core-principle::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="ux-pattern" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="15" cy="15" r="2" fill="rgba(99,102,241,0.1)"/><path d="M0,15 L30,15 M15,0 L15,30" stroke="rgba(99,102,241,0.05)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23ux-pattern)"/></svg>');
+            opacity: 0.4;
+        }
+
+        .core-principle h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .core-principle .intro-text {
+            color: #cbd5e1;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .principle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .principle-card {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            padding: 28px;
+            transition: all 0.3s ease;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .principle-card:hover {
+            border-color: #6366f1;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(99, 102, 241, 0.15);
+        }
+
+        .principle-number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .principle-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 16px;
+        }
+
+        .principle-content p {
+            color: #cbd5e1;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .principle-list {
+            list-style: none;
+            margin: 12px 0;
+            padding: 0;
+        }
+
+        .principle-list li {
+            color: #94a3b8;
+            margin-bottom: 6px;
+            position: relative;
+            padding-left: 20px;
+            font-size: 15px;
+        }
+
+        .principle-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #6366f1;
+            font-weight: 600;
+        }
 
         @media (max-width: 768px) {
             .main-grid {
@@ -487,6 +602,19 @@
 
             .smart-workpanes {
                 grid-template-columns: 1fr;
+            }
+
+            .principle-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .core-principle {
+                padding: 24px;
+                margin: 40px 0;
+            }
+
+            .core-principle h2 {
+                font-size: 1.6rem;
             }
 
             .header h1 {
@@ -544,6 +672,75 @@
         <div class="header">
             <h1>💬 UX & Interaction Design</h1>
             <p>Natural language-first interface with intelligent UI confirmations, real-time reasoning display, and contextual upsells designed for seamless marketing workflow integration.</p>
+        </div>
+
+        <!-- Core UX Principle -->
+        <div class="core-principle">
+            <div class="principle-header">
+                <h2>🎯 Core UX Principle: AI-Led Interaction, Not Chat-on-Top</h2>
+            </div>
+
+            <div class="principle-intro">
+                <p>Traditional SaaS interfaces are form-based: users click buttons, fill fields, and navigate dashboards.</p>
+                <p>"AI-powered" tools often bolt a chat window onto that existing interface — but the underlying interaction model stays the same.</p>
+                <p><strong>For the Marketing SuperAgent, we flip that hierarchy.</strong></p>
+            </div>
+
+            <div class="principle-grid">
+                <div class="principle-card">
+                    <div class="principle-number">1</div>
+                    <h3>Chat is the Operating Layer</h3>
+                    <div class="principle-content">
+                        <p>The AI conversation drives interaction — it's not a widget.</p>
+                        <p>Every action, query, or workflow begins in natural language and is orchestrated by the SuperAgent, which dynamically decides:</p>
+                        <ul class="principle-list">
+                            <li>which task agents to call,</li>
+                            <li>what UI modules to surface,</li>
+                            <li>when to ask for user confirmation or enrichment.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="principle-card">
+                    <div class="principle-number">2</div>
+                    <h3>UI Becomes Contextual & Adaptive</h3>
+                    <div class="principle-content">
+                        <p>Instead of static navigation, the interface emerges based on the chat.</p>
+                        <p><strong>For example:</strong></p>
+                        <ul class="principle-list">
+                            <li>When the user says "Create a mobile push campaign," the chat pane leads, while the right side surfaces the exact creative or audience builder needed — no menus, no manual steps.</li>
+                            <li>The UI becomes a conversation companion, not a control panel.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="principle-card">
+                    <div class="principle-number">3</div>
+                    <h3>Language + Visual Co-Orchestration</h3>
+                    <div class="principle-content">
+                        <p>We don't eliminate UI — we reimagine it:</p>
+                        <ul class="principle-list">
+                            <li>Natural language defines intent.</li>
+                            <li>The system translates that into structured UI components that confirm or refine key details ("Here's your target audience preview — want to adjust before activation?").</li>
+                            <li>The visual layer supports understanding and trust, not manual control.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="principle-card">
+                    <div class="principle-number">4</div>
+                    <h3>Outcome-Oriented Design</h3>
+                    <div class="principle-content">
+                        <p>The success metric is completion with minimal friction — not "time in app."</p>
+                        <p>Every interaction should feel like working with a capable human assistant who:</p>
+                        <ul class="principle-list">
+                            <li>understands context,</li>
+                            <li>shows you what matters,</li>
+                            <li>takes care of execution behind the scenes.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="main-grid">

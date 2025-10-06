@@ -208,43 +208,99 @@
             color: white;
         }
 
-        .layer-diagram {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 16px;
-            margin: 20px 0;
+        .architecture-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin: 30px 0;
+            padding: 20px;
         }
 
-        .layer {
-            background: rgba(15, 23, 42, 0.6);
+        .diagram-layer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .layer-box {
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid #22c55e;
             border-radius: 12px;
             padding: 20px;
-            border-left: 4px solid;
+            text-align: center;
+            width: 100%;
             transition: all 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .layer:hover {
-            background: rgba(16, 185, 129, 0.1);
-            border-color: rgba(16, 185, 129, 0.3);
-            transform: translateX(5px);
+        .layer-box:hover {
+            background: rgba(34, 197, 94, 0.1);
+            border-color: #16a34a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(34, 197, 94, 0.2);
         }
 
-        .layer.runtime { border-left-color: #3b82f6; }
-        .layer.orchestration { border-left-color: #10b981; }
-        .layer.agents { border-left-color: #f59e0b; }
-        .layer.interface { border-left-color: #ef4444; }
+        .layer-box.wide {
+            max-width: 700px;
+        }
 
         .layer-title {
-            font-weight: 600;
-            color: #f1f5f9;
+            font-weight: 700;
+            color: #22c55e;
+            font-size: 1.1rem;
             margin-bottom: 8px;
         }
 
-        .layer-description {
-            font-size: 14px;
+        .layer-subtitle {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            font-style: italic;
+        }
+
+        .layer-components {
+            margin-top: 12px;
+            text-align: left;
+        }
+
+        .layer-components.horizontal {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            text-align: center;
+        }
+
+        .component {
             color: #cbd5e1;
-            line-height: 1.5;
+            font-size: 0.9rem;
+            margin: 4px 0;
+        }
+
+        .layer-connector {
+            width: 2px;
+            height: 30px;
+            background: linear-gradient(to bottom, #22c55e, transparent);
+            margin: 10px 0;
+        }
+
+        .foundation-layer .layer-connector {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .layer-components.horizontal {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .layer-box {
+                padding: 16px;
+            }
+
+            .layer-title {
+                font-size: 1rem;
+            }
         }
 
         .framework-grid {
@@ -540,22 +596,43 @@
                     System Architecture
                 </div>
 
-                <div class="layer-diagram">
-                    <div class="layer interface">
-                        <div class="layer-title">Interface Layer</div>
-                        <div class="layer-description">Natural language chat, REST APIs, GraphQL endpoints, webhook integrations</div>
+                <div class="architecture-diagram">
+                    <div class="diagram-layer ui-layer">
+                        <div class="layer-box">
+                            <div class="layer-title">Marketing SuperAgent UI</div>
+                            <div class="layer-subtitle">(Chat + Multi-Agent Viz)</div>
+                        </div>
+                        <div class="layer-connector"></div>
                     </div>
-                    <div class="layer agents">
-                        <div class="layer-title">Agent Layer</div>
-                        <div class="layer-description">Suite-specific, cross-suite, and custom agents with specialized capabilities</div>
+
+                    <div class="diagram-layer orchestration-layer">
+                        <div class="layer-box">
+                            <div class="layer-title">Orchestration Layer (LLM)</div>
+                            <div class="layer-components">
+                                <div class="component">- Intent parsing</div>
+                                <div class="component">- Agent routing planner</div>
+                                <div class="component">- Memory/context manager</div>
+                            </div>
+                        </div>
+                        <div class="layer-connector"></div>
                     </div>
-                    <div class="layer orchestration">
-                        <div class="layer-title">Orchestration Layer</div>
-                        <div class="layer-description">Agent coordination, workflow management, state synchronization</div>
+
+                    <div class="diagram-layer runtime-layer">
+                        <div class="layer-box wide">
+                            <div class="layer-title">Agent Runtime (Composable Framework)</div>
+                            <div class="layer-components horizontal">
+                                <div class="component">- Task Agents</div>
+                                <div class="component">- Utility Agents</div>
+                            </div>
+                        </div>
+                        <div class="layer-connector"></div>
                     </div>
-                    <div class="layer runtime">
-                        <div class="layer-title">Runtime Layer</div>
-                        <div class="layer-description">Execution engine, security sandbox, resource management, monitoring</div>
+
+                    <div class="diagram-layer foundation-layer">
+                        <div class="layer-box">
+                            <div class="layer-title">TD AI Suite APIs & CDP</div>
+                            <div class="layer-subtitle">(Data, Identity, Actions)</div>
+                        </div>
                     </div>
                 </div>
             </div>

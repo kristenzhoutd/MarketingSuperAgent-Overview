@@ -711,6 +711,14 @@
                         <li><a href="agent-builder.html">Agent Builder Framework</a></li>
                     </ul>
                 </li>
+                <li class="dropdown">
+                    <a href="#mvp">MVP</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="mvp-business-strategy.html">Business Strategy</a></li>
+                        <li><a href="mvp-mvp.html">MVP Implementation</a></li>
+                        <li><a href="marketing-knowledge-base.html">Knowledge Base</a></li>
+                    </ul>
+                </li>
             </ul>
         </nav>
     </header>
@@ -911,6 +919,61 @@
 
             </div>
 
+            <!-- MVP Section -->
+            <div class="section-divider">
+                <h3 id="mvp">🚀 MVP</h3>
+            </div>
+
+            <div class="visualization-grid">
+                <div class="viz-card">
+                    <div class="viz-icon">💼</div>
+                    <h3>Business Strategy</h3>
+                    <p>Comprehensive MVP strategy for replacing traditional marketing agencies through AI-driven orchestration and intelligent automation.</p>
+
+                    <ul class="viz-features">
+                        <li>Strategic bandwidth replacement through AI planning</li>
+                        <li>Creative horsepower via multi-agent coordination</li>
+                        <li>Execution muscle through automated workflows</li>
+                        <li>30-minute campaign planning vs 2-3 week agency timelines</li>
+                        <li>Near-zero cost vs $10-50K agency fees</li>
+                    </ul>
+
+                    <a href="mvp-business-strategy.html" class="btn">Explore Strategy</a>
+                </div>
+
+                <div class="viz-card">
+                    <div class="viz-icon">🧠</div>
+                    <h3>MVP Implementation</h3>
+                    <p>CDP-Light MVP approach demonstrating multi-agent orchestration without first-party data dependencies through synthetic datasets and external APIs.</p>
+
+                    <ul class="viz-features">
+                        <li>12 candidate agents across 4 categories</li>
+                        <li>Synthetic data tables and mock campaign performance</li>
+                        <li>Agent-to-agent handoff demonstration</li>
+                        <li>Natural language orchestration workflows</li>
+                        <li>Optional AI Suite integration references</li>
+                    </ul>
+
+                    <a href="mvp-mvp.html" class="btn">Explore Implementation</a>
+                </div>
+
+                <div class="viz-card">
+                    <div class="viz-icon">📚</div>
+                    <h3>Knowledge Base</h3>
+                    <p>Centralized, searchable, RAG-indexed corpus providing SuperAgent with complete brand context, performance learnings, and compliance constraints.</p>
+
+                    <ul class="viz-features">
+                        <li>10 structured knowledge collections</li>
+                        <li>Auto-tagged and vector-indexed content</li>
+                        <li>Brand voice, product catalog, and persona data</li>
+                        <li>Performance learnings and optimization heuristics</li>
+                        <li>Read-only API access for all agents</li>
+                    </ul>
+
+                    <a href="marketing-knowledge-base.html" class="btn">Explore Knowledge Base</a>
+                </div>
+            </div>
+
         </div>
 
         </div>
@@ -922,6 +985,7 @@
         <div class="nav-dot" onclick="scrollToSection('ux')"></div>
         <div class="nav-dot" onclick="scrollToSection('ecosystem')"></div>
         <div class="nav-dot" onclick="scrollToSection('technical')"></div>
+        <div class="nav-dot" onclick="scrollToSection('mvp')"></div>
     </div>
 
     <script>
@@ -939,7 +1003,7 @@
 
         // Update navigation dots on scroll
         window.addEventListener('scroll', () => {
-            const sections = ['business', 'ux', 'ecosystem', 'technical'];
+            const sections = ['business', 'ux', 'ecosystem', 'technical', 'mvp'];
             const scrollPosition = window.scrollY + window.innerHeight / 2;
 
             sections.forEach((sectionId, index) => {
